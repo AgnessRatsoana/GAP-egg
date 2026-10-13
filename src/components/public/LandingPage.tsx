@@ -147,6 +147,7 @@ export const LandingPage: React.FC = () => {
           {/* SIGNATURE THINKING TRAVELLER HORIZONTAL SEARCH BAR */}
           <form
             onSubmit={handleSearch}
+            className="hero-search-form"
             style={{
               backgroundColor: '#FFFFFF',
               borderRadius: '6px',
@@ -154,16 +155,14 @@ export const LandingPage: React.FC = () => {
               border: '1px solid var(--border-stone-gold)',
               maxWidth: '960px',
               margin: '0 auto',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr)) 190px',
               overflow: 'hidden',
             }}
           >
             {/* Cell 1: Region */}
             <div
+              className="search-cell"
               style={{
                 padding: '14px 20px',
-                borderRight: '1px solid var(--border-color)',
                 textAlign: 'left',
               }}
             >
@@ -204,9 +203,9 @@ export const LandingPage: React.FC = () => {
 
             {/* Cell 2: Intake Window */}
             <div
+              className="search-cell"
               style={{
                 padding: '14px 20px',
-                borderRight: '1px solid var(--border-color)',
                 textAlign: 'left',
               }}
             >
@@ -243,9 +242,9 @@ export const LandingPage: React.FC = () => {
 
             {/* Cell 3: Support Needs */}
             <div
+              className="search-cell"
               style={{
                 padding: '14px 20px',
-                borderRight: '1px solid var(--border-color)',
                 textAlign: 'left',
               }}
             >
@@ -284,6 +283,7 @@ export const LandingPage: React.FC = () => {
             {/* Cell 4: Search Button */}
             <button
               type="submit"
+              className="search-btn"
               style={{
                 backgroundColor: 'var(--color-water)',
                 color: '#FFFFFF',

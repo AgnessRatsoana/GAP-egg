@@ -113,8 +113,8 @@ export const SanctuariesPage: React.FC = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: '36px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+          gap: '32px',
           marginBottom: '72px',
         }}
       >
@@ -318,7 +318,7 @@ export const SanctuariesPage: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 200,
-            padding: '24px',
+            padding: '16px',
           }}
           onClick={() => setActivePropertyModal(null)}
         >
@@ -421,10 +421,11 @@ export const SanctuariesPage: React.FC = () => {
               </div>
 
               {/* Modal Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => setActivePropertyModal(null)}
                   className="btn-luxury-outline"
+                  style={{ minWidth: '100px' }}
                 >
                   Close
                 </button>
@@ -434,6 +435,7 @@ export const SanctuariesPage: React.FC = () => {
                     setActiveView('apply');
                   }}
                   className="btn-luxury-forest"
+                  style={{ flex: '1 1 auto' }}
                 >
                   Apply for This Sanctuary
                 </button>

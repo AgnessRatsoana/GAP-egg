@@ -41,9 +41,10 @@ export const AdminConsole: React.FC = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - 100px)', backgroundColor: 'transparent' }}>
+    <div className="admin-console-layout" style={{ display: 'flex', minHeight: 'calc(100vh - 100px)', backgroundColor: 'transparent' }}>
       {/* Calming Deep Woodland Slate Sidebar */}
       <aside
+        className="admin-sidebar"
         style={{
           width: sidebarOpen ? '270px' : '76px',
           backgroundColor: '#1E2C23',
@@ -199,6 +200,7 @@ export const AdminConsole: React.FC = () => {
 
       {/* Main Content Area */}
       <main
+        className="admin-main-content"
         style={{
           flex: 1,
           backgroundColor: 'transparent',

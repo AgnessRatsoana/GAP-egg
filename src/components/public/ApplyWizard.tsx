@@ -290,7 +290,7 @@ export const ApplyWizard: React.FC = () => {
           boxShadow: 'var(--shadow-sm)',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', overflowX: 'auto', paddingBottom: '6px', marginBottom: '12px' }}>
           {[
             { num: 1, label: 'Contact' },
             { num: 2, label: 'About You' },

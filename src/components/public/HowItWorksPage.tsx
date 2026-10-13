@@ -114,8 +114,9 @@ export const HowItWorksPage: React.FC = () => {
               borderRadius: '6px',
               padding: '36px 32px',
               display: 'flex',
-              gap: '28px',
+              gap: '24px',
               alignItems: 'flex-start',
+              flexWrap: 'wrap',
             }}
           >
             <div

@@ -345,3 +345,105 @@ a:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
 }
+
+/* ==========================================================================
+   MOBILE & RESPONSIVE BREAKPOINTS (Gap a Month Luxury Responsiveness)
+   ========================================================================== */
+
+/* 1. Header & Navigation Responsiveness */
+@media (max-width: 960px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-nav-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 961px) {
+  .mobile-drawer {
+    display: none !important;
+  }
+  .mobile-nav-toggle {
+    display: none !important;
+  }
+}
+
+/* 2. Hero & Thinking Traveller Search Bar */
+@media (max-width: 860px) {
+  .hero-search-form {
+    grid-template-columns: 1fr !important;
+  }
+  .search-cell {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+  }
+  .search-btn {
+    width: 100% !important;
+    padding: 16px !important;
+  }
+}
+
+/* 3. Global Mobile Spacing, Cards, and Inputs */
+@media (max-width: 640px) {
+  section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .luxury-card {
+    padding: 24px 18px !important;
+  }
+
+  /* Compact button padding on small screens */
+  .btn-luxury-outline,
+  .btn-green-solid,
+  .btn-water-solid,
+  .btn-brown-solid {
+    padding: 10px 16px;
+    font-size: 11px;
+  }
+}
+
+/* 4. Admin Console Responsive Layout */
+@media (max-width: 860px) {
+  .admin-console-layout {
+    flex-direction: column !important;
+  }
+  .admin-sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #2B3D32 !important;
+    padding: 16px 20px !important;
+  }
+  .admin-main-content {
+    padding: 24px 16px !important;
+  }
+}
+
+/* 5. Responsive Images & Touch-Friendly Table Scrolling */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 6. Smooth Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(54, 122, 143, 0.22);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(54, 122, 143, 0.42);
+}
