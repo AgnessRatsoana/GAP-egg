@@ -1,0 +1,347 @@
+/* Gap a Month — Serene Sanctuary Design System (Serene Aegean Sea Blue, Sky Mist, Whitewash & Warm Terracotta) */
+:root {
+  /* 1. SERENE COASTAL & AEGEAN PALETTE (Calm Sea Mist, Sunlit Whitewash & Warm Terracotta) */
+  --bg-page: #F3F7FA;          /* Soft serene coastal sky mist */
+  --bg-card: #FFFFFF;          /* Pure whitewash sanctuary surface */
+  --bg-serene-water: #EBF4F7;  /* Gentle sea-mist wash */
+  --bg-serene-warm: #FAF4EF;   /* Soft sun-warmed sand/terracotta wash */
+  --bg-beige: #F5EFEB;         /* Soft warm sandstone */
+  --bg-beige-subtle: #FAF8F5;  /* Lightest cream mist */
+  --bg-warm: #F2EBE3;          /* Warm sun-baked terracotta sand wash */
+  --bg-stone: #EAE3D9;
+  --border-beige: #E2D9CE;     /* Delicate warm beige border */
+  --border-color: #DEE9ED;     /* Delicate serene sea-mist border */
+  --border-subtle: #EAF1F4;
+  --border-water: #C6E0E9;     /* Serene water border */
+  --border-stone-gold: #D8CBB8;
+
+  /* 2. SERENE WATER & AEGEAN BLUE (The Primary Calm & Stillness Tone) */
+  --color-water: #367A8F;          /* Serene Aegean sea blue / sea-glass */
+  --color-water-deep: #22596B;     /* Deep calm ocean stillness */
+  --color-water-light: #E8F4F7;    /* Clean airy water mist pale */
+  --color-water-border: #C2DFE8;
+  --color-water-glow: rgba(54, 122, 143, 0.14);
+
+  /* 3. BOTANICAL SAGE GREEN (Restoration & Vitality) */
+  --color-green: #3D6F56;          /* Calming botanical sage green */
+  --color-green-hover: #2B5440;
+  --color-green-light: #EFF7F2;     /* Fresh sage mist */
+  --color-green-border: #C8E2D2;
+  --color-green-subtle: rgba(61, 111, 86, 0.08);
+
+  --primary-forest: #3D6F56;
+  --primary-forest-hover: #2B5440;
+  --primary-forest-light: #EFF7F2;
+  --primary-forest-border: #C8E2D2;
+  --primary-forest-glow: rgba(61, 111, 86, 0.12);
+
+  /* 4. WARM TERRACOTTA & SUN-WARMED CLAY (Warm Mediterranean Rooftops & Cliffs) */
+  --color-brown: #C27450;          /* Warm Mediterranean terracotta */
+  --color-brown-dark: #A35A38;     /* Deep roasted clay */
+  --color-brown-light: #FAF1EB;    /* Delicate peach-clay wash */
+  --color-brown-border: #ECCDBE;
+  --accent-clay: #C27450;
+  --accent-clay-light: #FAF1EB;
+  --accent-sand: #B8855A;          /* Sun-warmed golden sand */
+  --accent-sand-light: #F9F3EC;
+
+  /* Deep Calming Woodland-Charcoal Text (Not harsh black) */
+  --text-heading: #1E2827;         /* Deep sea-woodland charcoal */
+  --text-main: #283533;
+  --text-body: #485654;            /* Soft readable graphite */
+  --text-muted: #6E7E7C;           /* Serene muted sea-grey */
+  --text-subtle: #96A6A4;
+
+  /* Console & Dark Slate */
+  --console-navy: #1B2920;
+  --console-navy-surface: #25362B;
+  --console-border: #324739;
+
+  /* Status Pills */
+  --status-green-bg: #E4F2E7;
+  --status-green-text: #1C5432;
+  --status-green-border: #C6E6CF;
+
+  --status-amber-bg: #FDF4DF;
+  --status-amber-text: #805615;
+  --status-amber-border: #FBE6B6;
+
+  --status-blue-bg: #E7F2F4;
+  --status-blue-text: #2A4E55;
+  --status-blue-border: #C4DEE3;
+
+  --status-red-bg: #FCECEB;
+  --status-red-text: #962822;
+  --status-red-border: #F8CBC8;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(35, 45, 38, 0.04);
+  --shadow-card: 0 2px 14px -2px rgba(35, 45, 38, 0.05), 0 1px 4px rgba(35, 45, 38, 0.03);
+  --shadow-hover: 0 8px 24px -4px rgba(35, 45, 38, 0.08), 0 2px 6px rgba(35, 45, 38, 0.04);
+  --shadow-float: 0 16px 36px -6px rgba(35, 45, 38, 0.12);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  /* Fonts */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-page);
+  background-image:
+    linear-gradient(180deg, rgba(243, 247, 250, 0.88) 0%, rgba(243, 247, 250, 0.93) 45%, rgba(243, 247, 250, 0.97) 100%),
+    url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80");
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--text-heading);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.tracking-widest {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.tracking-wider {
+  letter-spacing: 0.1em;
+}
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+input, textarea, select {
+  font-family: var(--font-sans);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  background-color: #FFFFFF;
+  color: var(--text-main);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-green);
+  box-shadow: 0 0 0 3px var(--primary-forest-glow);
+}
+
+a {
+  color: var(--color-green);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+a:hover {
+  color: var(--color-green-hover);
+}
+
+/* CALM BUTTON STYLES (Green, Brown, Water, Beige) */
+.btn-green-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: var(--color-green);
+  color: #FAF8F5;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid var(--color-green);
+  transition: all 0.2s ease;
+}
+
+.btn-green-solid:hover {
+  background: var(--color-green-hover);
+  border-color: var(--color-green-hover);
+  color: #FAF8F5;
+}
+
+.btn-brown-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: var(--color-brown);
+  color: #FAF8F5;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid var(--color-brown);
+  transition: all 0.2s ease;
+}
+
+.btn-brown-solid:hover {
+  background: var(--color-brown-dark);
+  border-color: var(--color-brown-dark);
+  color: #FAF8F5;
+}
+
+.btn-water-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: var(--color-water);
+  color: #FAF8F5;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid var(--color-water);
+  transition: all 0.2s ease;
+}
+
+.btn-water-solid:hover {
+  background: var(--color-water-deep);
+  border-color: var(--color-water-deep);
+  color: #FAF8F5;
+}
+
+.btn-luxury-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1px solid var(--border-stone-gold);
+  background: transparent;
+  color: var(--text-heading);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-luxury-outline:hover {
+  background: var(--color-green);
+  color: #FAF8F5;
+  border-color: var(--color-green);
+}
+
+.btn-luxury-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: var(--color-green);
+  color: #FAF8F5;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid var(--color-green);
+  transition: all 0.2s ease;
+}
+
+.btn-luxury-solid:hover {
+  background: var(--color-green-hover);
+  border-color: var(--color-green-hover);
+  color: #FAF8F5;
+}
+
+.btn-luxury-forest {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background: var(--color-green);
+  color: #FAF8F5;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid var(--color-green);
+  transition: all 0.2s ease;
+}
+
+.btn-luxury-forest:hover {
+  background: var(--color-green-hover);
+  border-color: var(--color-green-hover);
+}
+
+/* Luxury card presentation */
+.luxury-card {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxury-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
