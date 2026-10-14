@@ -8,7 +8,13 @@ import {
   Lock,
   Heart,
   Sparkles,
+  FileText,
+  Home,
+  Scale,
+  UserCheck,
 } from 'lucide-react';
+import { VerificationCenter } from '../common/VerificationCenter';
+import { SanctuaryPoliciesModal } from '../common/SanctuaryPoliciesModal';
 
 export const ApplyWizard: React.FC = () => {
   const { addBeneficiary, setRole, setCurrentBeneficiaryId, setActiveView } = useApp();
@@ -16,12 +22,16 @@ export const ApplyWizard: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
 
+  const [policyModalOpen, setPolicyModalOpen] = useState(false);
+  const [policyInitialTab, setPolicyInitialTab] = useState<'terms' | 'rules' | 'indemnity' | 'verification'>('terms');
+
   // Form State
   const [formData, setFormData] = useState({
     // Step 1: Personal Info
     name: '',
     email: '',
     phone: '',
+    province: 'Western Cape',
     city: '',
     dateOfBirth: '',
     emergencyName: '',
@@ -42,9 +52,13 @@ export const ApplyWizard: React.FC = () => {
     petConsiderations: '',
     moveInDate: 'Within 2 weeks',
 
-    // Step 5: Consents
+    // Step 5: Consents & Policies
     consentTruthful: false,
     consentPrivacy: false,
+    consentTerms: false,
+    consentHouseRules: false,
+    consentIndemnity: false,
+    digitalSignature: '',
   });
 
   const updateField = (field: string, val: any) => {
