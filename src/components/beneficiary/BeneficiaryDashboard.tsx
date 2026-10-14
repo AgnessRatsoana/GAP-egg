@@ -15,6 +15,11 @@ import {
   ChevronRight,
   PhoneCall,
   Sparkles,
+  X,
+  Key,
+  Wifi,
+  Flame,
+  AlertTriangle,
 } from 'lucide-react';
 
 export const BeneficiaryDashboard: React.FC = () => {
@@ -459,40 +464,41 @@ export const BeneficiaryDashboard: React.FC = () => {
               </h3>
               <button
                 onClick={() => setShowHouseManual(false)}
-                style={{ background: 'none', fontSize: '18px', color: 'var(--text-muted)' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+                aria-label="Close"
               >
-                ✕
+                <X size={18} />
               </button>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', fontSize: '14px', color: 'var(--text-body)' }}>
               <div>
-                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
-                  🔑 Front Door Keypad
+                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Key size={15} color="var(--primary-forest)" /> Front Door Keypad
                 </h4>
                 <p>PIN code is <strong>2491#</strong>. To lock from outside, simply press the lock button on the keypad.</p>
               </div>
 
               <div>
-                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
-                  📶 Wi-Fi Network
+                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Wifi size={15} color="var(--color-water)" /> Wi-Fi Network
                 </h4>
                 <p>Network: <strong>Serenity_Haven</strong> • Password: <strong>peaceful-rest-2026</strong></p>
               </div>
 
               <div>
-                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
-                  🔥 Wood-Burning Stove
+                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Flame size={15} color="var(--color-brown)" /> Wood-Burning Hearth
                 </h4>
                 <p>Kiln-dried seasoned logs and firelighters are stocked beside the fireplace. Extra logs are under the porch shelter.</p>
               </div>
 
               <div>
-                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
-                  🚨 Emergency & Medical
+                <h4 style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <AlertTriangle size={15} color="var(--accent-clay)" /> Emergency & Medical Contacts
                 </h4>
-                <p>• Gap a Month 24/7 Care Line: <strong>0800 427 6668</strong></p>
-                <p>• Emergency Services: <strong>999</strong></p>
+                <p>• Gap a Month 24/7 Care Line: <strong>+27 21 880 1200</strong></p>
+                <p>• Emergency Medical Response: <strong>10177</strong></p>
               </div>
             </div>
 

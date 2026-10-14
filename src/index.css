@@ -347,6 +347,86 @@ a:hover {
 }
 
 /* ==========================================================================
+   HERO SEARCH FORM & LUXURY ARCHITECTURAL CONTROLS
+   ========================================================================== */
+.hero-search-form {
+  display: grid !important;
+  grid-template-columns: 1.4fr 1.15fr 1.45fr auto !important;
+  align-items: stretch;
+  background: #FFFFFF;
+  border-radius: 14px;
+  box-shadow: 0 20px 48px -10px rgba(12, 28, 20, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.35);
+  max-width: 1040px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-cell {
+  padding: 16px 20px;
+  text-align: left;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justifyContent: center;
+  background: #FFFFFF;
+  transition: background-color 0.18s ease;
+}
+
+.search-cell:hover {
+  background-color: #FAFBF9;
+}
+
+.search-cell-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-cell select {
+  border: none !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--text-heading) !important;
+  background-color: transparent !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.search-btn {
+  background: var(--color-green);
+  color: #FFFFFF;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 18px 28px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.search-btn:hover {
+  background: var(--color-green-hover);
+  filter: brightness(1.08);
+}
+
+/* ==========================================================================
    MOBILE & RESPONSIVE BREAKPOINTS (Gap a Month Luxury Responsiveness)
    ========================================================================== */
 
@@ -372,17 +452,20 @@ a:hover {
 }
 
 /* 2. Hero & Thinking Traveller Search Bar */
-@media (max-width: 860px) {
+@media (max-width: 920px) {
   .hero-search-form {
     grid-template-columns: 1fr !important;
+    border-radius: 16px;
   }
   .search-cell {
     border-right: none !important;
     border-bottom: 1px solid var(--border-color) !important;
+    padding: 14px 18px !important;
   }
   .search-btn {
     width: 100% !important;
     padding: 16px !important;
+    border-radius: 0 0 16px 16px;
   }
 }
 

@@ -17,6 +17,7 @@ import {
   PhoneCall,
   Search,
   Star,
+  Calendar,
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
@@ -34,40 +35,40 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in" style={{ width: '100%' }}>
-      {/* 1. CINEMATIC VISUAL HERO (The Thinking Traveller Style) */}
+      {/* 1. CINEMATIC LUXURY SANCTUARY HERO */}
       <section
         style={{
           position: 'relative',
-          minHeight: '82vh',
+          minHeight: '88vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           overflow: 'hidden',
-          padding: '60px 24px 80px',
+          padding: '80px 24px 100px',
         }}
       >
-        {/* Full-Bleed Sunlit South African Sanctuary Photo Background */}
+        {/* Full-Bleed Breathtaking South African Mountain Sanctuary Landscape */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             backgroundImage:
-              'url("https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2000&q=85")',
+              'url("https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=2400&q=90")',
             backgroundSize: 'cover',
-            backgroundPosition: 'center 40%',
-            filter: 'brightness(1.05) saturate(1.05)',
+            backgroundPosition: 'center 42%',
+            filter: 'brightness(0.96) contrast(1.04)',
             zIndex: 0,
           }}
         />
 
-        {/* Luminous Serene Sea Scrim matching the calm coastal palette */}
+        {/* Sophisticated Deep Botanical-Navy Scrim for Crystal-Clear Contrast */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(180deg, rgba(22, 64, 80, 0.46) 0%, rgba(28, 75, 92, 0.22) 38%, rgba(32, 80, 98, 0.38) 72%, rgba(243, 247, 250, 0.90) 94%, #F3F7FA 100%)',
+              'linear-gradient(180deg, rgba(14, 26, 20, 0.74) 0%, rgba(18, 34, 26, 0.50) 40%, rgba(14, 26, 20, 0.78) 80%, rgba(243, 247, 250, 0.98) 98%, #F3F7FA 100%)',
             zIndex: 1,
           }}
         />
@@ -77,120 +78,96 @@ export const LandingPage: React.FC = () => {
           style={{
             position: 'relative',
             zIndex: 2,
-            maxWidth: '1100px',
+            maxWidth: '1160px',
+            width: '100%',
             margin: '0 auto',
             textAlign: 'center',
             color: '#FFFFFF',
-            paddingTop: '20px',
           }}
         >
-          {/* Breadcrumb / Tagline */}
-          <div
-            style={{
-              fontSize: '11px',
-              letterSpacing: '0.24em',
-              textTransform: 'uppercase',
-              color: '#FFFFFF',
-              fontWeight: 600,
-              marginBottom: '18px',
-              textShadow: '0 1px 6px rgba(0, 0, 0, 0.4)',
-            }}
-          >
-            YOUR GAP MONTH • A SEASON TO RETURN TO YOURSELF
+          {/* Elegant Pill Badge */}
+          <div style={{ marginBottom: '20px' }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '7px 18px',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.28)',
+                color: '#FAF6F0',
+                fontSize: '11px',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+              }}
+            >
+              <Sparkles size={12} color="#E5C39E" />
+              <span>A Season to Return to Yourself • South Africa</span>
+            </span>
           </div>
 
-          {/* Large Serif Title with Italic Accent */}
+          {/* Majestic Editorial H1 Title */}
           <h1
             className="font-serif"
             style={{
-              fontSize: 'clamp(38px, 6vw, 68px)',
+              fontSize: 'clamp(38px, 5.8vw, 68px)',
               fontWeight: 300,
               color: '#FFFFFF',
               lineHeight: 1.15,
               marginBottom: '20px',
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              textShadow: '0 2px 16px rgba(0, 0, 0, 0.45)',
+              letterSpacing: '0.02em',
+              textShadow: '0 3px 24px rgba(0, 0, 0, 0.55)',
             }}
           >
-            Peaceful Sanctuaries{' '}
+            Peaceful Sanctuaries for{' '}
             <span
               style={{
                 fontStyle: 'italic',
-                textTransform: 'lowercase',
                 fontWeight: 400,
-                color: '#F4EFE6',
-                padding: '0 6px',
+                color: '#F4ECE1',
+                borderBottom: '2px solid rgba(229, 195, 158, 0.6)',
+                paddingBottom: '2px',
               }}
             >
-              for
-            </span>{' '}
-            Restoration
+              Restoration
+            </span>
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle with High-Contrast Readability */}
           <p
             style={{
-              fontSize: 'clamp(14px, 1.8vw, 18px)',
-              color: '#FFFFFF',
-              lineHeight: 1.6,
-              maxWidth: '720px',
-              margin: '0 auto 44px',
+              fontSize: 'clamp(15px, 1.4vw, 19px)',
+              color: 'rgba(255, 255, 255, 0.94)',
+              lineHeight: 1.65,
+              maxWidth: '820px',
+              margin: '0 auto 40px',
               fontWeight: 400,
-              letterSpacing: '0.02em',
-              textShadow: '0 1px 8px rgba(0, 0, 0, 0.4)',
+              letterSpacing: '0.01em',
+              textShadow: '0 2px 12px rgba(0, 0, 0, 0.5)',
             }}
           >
-            Dignified temporary residences & dedicated professional wellbeing care across storied South African countryside, shorelines, and peaceful havens.
+            Dignified 30-day temporary residences and dedicated professional wellbeing care across storied South African countryside, coastal shorelines, and peaceful mountain havens.
           </p>
 
-          {/* SIGNATURE THINKING TRAVELLER HORIZONTAL SEARCH BAR */}
+          {/* SIGNATURE HORIZONTAL SEARCH & DISCOVERY BAR */}
           <form
             onSubmit={handleSearch}
             className="hero-search-form"
-            style={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: '6px',
-              boxShadow: 'var(--shadow-float)',
-              border: '1px solid var(--border-stone-gold)',
-              maxWidth: '960px',
-              margin: '0 auto',
-              overflow: 'hidden',
-            }}
           >
             {/* Cell 1: Select Province */}
-            <div
-              className="search-cell"
-              style={{
-                padding: '14px 20px',
-                textAlign: 'left',
-              }}
-            >
-              <div
-                style={{
-                  fontSize: '10px',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--text-muted)',
-                  fontWeight: 600,
-                  marginBottom: '4px',
-                }}
-              >
-                Select Province
+            <div className="search-cell">
+              <div className="search-cell-label">
+                <MapPin size={13} color="var(--color-green)" />
+                <span>Select Province</span>
               </div>
               <select
                 value={selectedRegion}
                 onChange={(e) => setSelectedRegion(e.target.value)}
-                style={{
-                  border: 'none',
-                  padding: 0,
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: 'var(--text-heading)',
-                  backgroundColor: 'transparent',
-                  cursor: 'pointer',
-                  width: '100%',
-                }}
               >
                 <option value="all">All 9 South African Provinces</option>
                 <option value="Western Cape">Western Cape (Cape Town, Winelands, Garden Route)</option>
@@ -206,76 +183,30 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {/* Cell 2: Intake Window */}
-            <div
-              className="search-cell"
-              style={{
-                padding: '14px 20px',
-                textAlign: 'left',
-              }}
-            >
-              <div
-                style={{
-                  fontSize: '10px',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--text-muted)',
-                  fontWeight: 600,
-                  marginBottom: '4px',
-                }}
-              >
-                Stay Window
+            <div className="search-cell">
+              <div className="search-cell-label">
+                <Calendar size={13} color="var(--color-water)" />
+                <span>Stay Window</span>
               </div>
               <select
                 value={selectedIntake}
                 onChange={(e) => setSelectedIntake(e.target.value)}
-                style={{
-                  border: 'none',
-                  padding: 0,
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: 'var(--text-heading)',
-                  backgroundColor: 'transparent',
-                  cursor: 'pointer',
-                }}
               >
                 <option value="immediate">Immediate (30-Day Sanctuary)</option>
-                <option value="upcoming">Upcoming Winter Intake</option>
-                <option value="crisis">Emergency Triage</option>
+                <option value="upcoming">Upcoming Month Intake</option>
+                <option value="crisis">Emergency Respite</option>
               </select>
             </div>
 
             {/* Cell 3: Support Needs */}
-            <div
-              className="search-cell"
-              style={{
-                padding: '14px 20px',
-                textAlign: 'left',
-              }}
-            >
-              <div
-                style={{
-                  fontSize: '10px',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--text-muted)',
-                  fontWeight: 600,
-                  marginBottom: '4px',
-                }}
-              >
-                Circumstance
+            <div className="search-cell">
+              <div className="search-cell-label">
+                <Heart size={13} color="var(--color-brown)" />
+                <span>Circumstance</span>
               </div>
               <select
                 value={selectedNeed}
                 onChange={(e) => setSelectedNeed(e.target.value)}
-                style={{
-                  border: 'none',
-                  padding: 0,
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: 'var(--text-heading)',
-                  backgroundColor: 'transparent',
-                  cursor: 'pointer',
-                }}
               >
                 <option value="all">Caregiver Burnout & Transition</option>
                 <option value="bereavement">Grief & Bereavement</option>
@@ -288,29 +219,119 @@ export const LandingPage: React.FC = () => {
             <button
               type="submit"
               className="search-btn"
-              style={{
-                backgroundColor: 'var(--color-water)',
-                color: '#FFFFFF',
-                border: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                fontSize: '12px',
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                fontWeight: 600,
-                cursor: 'pointer',
-                padding: '14px 20px',
-                transition: 'background-color 0.2s ease',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-water-deep)')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-water)')}
             >
               <Search size={15} />
               <span>Search Havens</span>
             </button>
           </form>
+
+          {/* Quick Direct Actions */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '14px',
+              marginTop: '32px',
+            }}
+          >
+            <button
+              onClick={() => setActiveView('apply')}
+              className="btn-luxury-solid"
+              style={{
+                padding: '13px 26px',
+                fontSize: '12px',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
+              }}
+            >
+              Apply for a 30-Day Sanctuary <ArrowRight size={14} />
+            </button>
+
+            <button
+              onClick={() => setActiveView('offer-home')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 24px',
+                borderRadius: '4px',
+                backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.35)',
+                color: '#FFFFFF',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.28)';
+                e.currentTarget.style.borderColor = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.16)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.35)';
+              }}
+            >
+              <Home size={14} /> Offer a Sanctuary Haven
+            </button>
+
+            <button
+              onClick={() => setActiveView('sanctuaries')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '12px 20px',
+                color: '#FAF6F0',
+                fontSize: '12px',
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                background: 'transparent',
+                border: 'none',
+                textShadow: '0 1px 8px rgba(0,0,0,0.4)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#FAF6F0')}
+            >
+              <Compass size={14} /> Explore All Havens <ArrowRight size={13} />
+            </button>
+          </div>
+
+          {/* Trust Credibility Micro-Strip */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '24px',
+              marginTop: '44px',
+              paddingTop: '28px',
+              borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'rgba(255, 255, 255, 0.92)' }}>
+              <Shield size={14} color="#C6E6CF" />
+              <span>100% Confidential Care</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'rgba(255, 255, 255, 0.92)' }}>
+              <CheckCircle2 size={14} color="#C6E6CF" />
+              <span>Fully Funded Residencies (Zero Cost)</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'rgba(255, 255, 255, 0.92)' }}>
+              <Heart size={14} color="#ECCDBE" />
+              <span>Dedicated HPCSA Care Circles</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'rgba(255, 255, 255, 0.92)' }}>
+              <MapPin size={14} color="#C2DFE8" />
+              <span>All 9 South African Provinces</span>
+            </div>
+          </div>
         </div>
 
         {/* Seamless bottom fade transitioning hero image to the rest of the web */}
@@ -320,8 +341,8 @@ export const LandingPage: React.FC = () => {
             bottom: 0,
             left: 0,
             right: 0,
-            height: '120px',
-            background: 'linear-gradient(to bottom, rgba(14, 36, 48, 0) 0%, rgba(243, 247, 250, 0.5) 60%, rgba(243, 247, 250, 0.95) 100%)',
+            height: '100px',
+            background: 'linear-gradient(to bottom, rgba(14, 26, 20, 0) 0%, rgba(243, 247, 250, 0.6) 70%, rgba(243, 247, 250, 1) 100%)',
             zIndex: 1,
             pointerEvents: 'none',
           }}

@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Clock,
   Plus,
+  Check,
 } from 'lucide-react';
 
 export const AdminFinance: React.FC = () => {
@@ -367,9 +368,12 @@ export const AdminFinance: React.FC = () => {
                         borderRadius: '8px',
                         fontSize: '12px',
                         fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
                       }}
                     >
-                      ✓ Mark Completed
+                      <Check size={13} /> Mark Completed
                     </button>
                   )}
                 </div>

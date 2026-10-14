@@ -7,6 +7,7 @@ import {
   Wrench,
   Coffee,
   Truck,
+  Check,
 } from 'lucide-react';
 
 export const AdminSafety: React.FC = () => {
@@ -178,9 +179,12 @@ export const AdminSafety: React.FC = () => {
                         borderRadius: '8px',
                         fontSize: '12px',
                         fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
                       }}
                     >
-                      ✓ Mark Resolved
+                      <Check size={13} /> Mark Resolved
                     </button>
                   )}
                 </div>

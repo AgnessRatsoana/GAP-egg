@@ -7,6 +7,7 @@ import {
   Shield,
   MapPin,
   Search,
+  Check,
 } from 'lucide-react';
 
 export const AdminAccommodations: React.FC = () => {
@@ -176,9 +177,12 @@ export const AdminAccommodations: React.FC = () => {
                       borderRadius: '8px',
                       fontSize: '11px',
                       fontWeight: 600,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
                     }}
                   >
-                    ✓ Approve
+                    <Check size={12} /> Approve
                   </button>
                 )}
                 {prop.verificationStatus === 'pending' && (

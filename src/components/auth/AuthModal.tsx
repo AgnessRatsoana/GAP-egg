@@ -267,7 +267,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     boxShadow: loginRole === 'beneficiary' ? 'var(--shadow-sm)' : 'none',
                   }}
                 >
-                  🌿 Beneficiary / Guest
+                  Beneficiary / Guest
                 </button>
                 <button
                   type="button"
@@ -284,7 +284,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     boxShadow: loginRole === 'admin' ? 'var(--shadow-sm)' : 'none',
                   }}
                 >
-                  📋 Care Lead / Ops
+                  Care Lead / Ops
                 </button>
               </div>
 
@@ -474,7 +474,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     }}
                   >
                     <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text-heading)' }}>
-                      🌿 Guest / Beneficiary
+                      Guest / Beneficiary
                     </div>
                     <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
                       Seeking a 30-day sanctuary stay
@@ -492,12 +492,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       }`,
                       backgroundColor:
                         registerRole === 'host' ? 'var(--color-brown-light)' : '#FFFFFF',
-                      textAlign: 'left',
+                       textAlign: 'left',
                       cursor: 'pointer',
                     }}
                   >
                     <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text-heading)' }}>
-                      🏡 Haven Host
+                      Haven Host
                     </div>
                     <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>
                       Offering a peaceful home

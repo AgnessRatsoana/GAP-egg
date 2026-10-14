@@ -9,6 +9,7 @@ import {
   Truck,
   CheckCircle2,
   Sparkles,
+  X,
 } from 'lucide-react';
 
 export const ComfortRequestsView: React.FC = () => {
@@ -194,7 +195,7 @@ export const ComfortRequestsView: React.FC = () => {
               fontSize: '14px',
             }}
           >
-            <div style={{ fontSize: '28px', marginBottom: '8px' }}>🧺</div>
+            <Package size={28} color="var(--primary-forest)" style={{ marginBottom: '8px' }} />
             <div style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
               No comfort requests submitted yet
             </div>
@@ -288,8 +289,12 @@ export const ComfortRequestsView: React.FC = () => {
               <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)' }}>
                 Request Comfort Provision
               </h3>
-              <button onClick={() => setShowModal(false)} style={{ background: 'none', fontSize: '18px', color: 'var(--text-muted)' }}>
-                ✕
+              <button
+                onClick={() => setShowModal(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+                aria-label="Close"
+              >
+                <X size={18} />
               </button>
             </div>
 

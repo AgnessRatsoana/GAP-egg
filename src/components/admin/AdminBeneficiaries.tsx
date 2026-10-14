@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   DollarSign,
   Plus,
+  Check,
 } from 'lucide-react';
 
 export const AdminBeneficiaries: React.FC = () => {
@@ -212,8 +213,8 @@ export const AdminBeneficiaries: React.FC = () => {
 
                     <td style={{ padding: '16px 20px' }}>
                       {ben.assignedPropertyName ? (
-                        <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
-                          🏡 {ben.assignedPropertyName}
+                        <span style={{ color: 'var(--text-main)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <Home size={14} color="var(--primary-forest)" /> {ben.assignedPropertyName}
                         </span>
                       ) : (
                         <span style={{ color: 'var(--text-subtle)', fontStyle: 'italic' }}>Pending matching</span>
@@ -376,9 +377,12 @@ export const AdminBeneficiaries: React.FC = () => {
                         fontWeight: 600,
                         color: 'var(--primary-forest)',
                         border: '1px solid var(--border-color)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
                       }}
                     >
-                      ✓ {s.replace('_', ' ')}
+                      <Check size={12} /> {s.replace('_', ' ')}
                     </span>
                   ))}
                 </div>
