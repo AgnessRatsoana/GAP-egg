@@ -25,7 +25,7 @@ export type BookingStatus =
 export type ServiceProviderCategory =
   | 'counselling'
   | 'therapy'
-  | 'social_work'
+  | 'restorative_mentorship'
   | 'wellness'
   | 'coaching'
   | 'healthcare';
@@ -139,6 +139,7 @@ export interface Property {
   title: string;
   address: string;
   city: string;
+  province: string; // South African Province (e.g. Western Cape, KwaZulu-Natal, Mpumalanga, etc.)
   propertyType: 'cottage' | 'studio' | 'apartment' | 'retreat_villa' | 'guest_suite';
   bedrooms: number;
   bathrooms: number;
@@ -156,6 +157,26 @@ export interface Property {
   currentBeneficiaryId?: string;
   inspectionNotes?: string;
   createdAt: string;
+}
+
+export interface VerificationData {
+  idType: 'sa_id' | 'passport';
+  idNumber: string;
+  idDocumentName?: string;
+  idVerified: boolean;
+  residentialAddress: string;
+  suburb: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  proofOfAddressDocName?: string;
+  addressVerified: boolean;
+  facePhotoData?: string;
+  faceLivenessConfirmed: boolean;
+  faceMatchScore: number; // e.g. 98.4
+  faceVerified: boolean;
+  verificationDate?: string;
+  certificateRef?: string;
 }
 
 export interface Booking {

@@ -41,7 +41,7 @@ export const AdminServiceProviders: React.FC = () => {
           Clinical & Wellbeing Practitioners
         </h1>
         <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-          Vetted psychologists, licensed social workers, somatic therapists, and holistic nutritionists.
+          Vetted psychologists, restorative life coaches, somatic therapists, and holistic nutritionists.
         </p>
       </div>
 

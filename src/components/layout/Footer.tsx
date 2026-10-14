@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#A3B4AA' }}>
             <li>Trauma-informed Psychotherapy</li>
             <li>Somatic Nervous System Downregulation</li>
-            <li>Social Work & Housing Transition</li>
+            <li>Restorative Care & Mindful Mentorship</li>
             <li>Convalescence & Medical Relief</li>
             <li>Life Restructuring & Boundaries</li>
           </ul>

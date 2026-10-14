@@ -52,7 +52,7 @@ export const MySupportView: React.FC = () => {
             Support & Clinical Sessions
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-            Fully funded sessions with chartered clinical psychologists, social workers, and somatic practitioners.
+            Fully funded sessions with chartered clinical psychologists, restorative mentors, and somatic practitioners.
           </p>
         </div>
 
@@ -246,7 +246,7 @@ export const MySupportView: React.FC = () => {
                 >
                   <option value="counselling">Clinical Psychology / Trauma Counselling</option>
                   <option value="therapy">Somatic & Nervous System Breathwork</option>
-                  <option value="social_work">Housing Transition & Social Worker</option>
+                  <option value="restorative_mentorship">Restorative Mentorship & Mindful Living</option>
                   <option value="wellness">Holistic Wellness & Nutrition</option>
                   <option value="coaching">Life Restructuring & Boundaries</option>
                   <option value="healthcare">Medical Convalescence Review</option>

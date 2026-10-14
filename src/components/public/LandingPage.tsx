@@ -47,27 +47,27 @@ export const LandingPage: React.FC = () => {
           padding: '60px 24px 80px',
         }}
       >
-        {/* Full-Bleed Sunlit Sanctuary Photo Background */}
+        {/* Full-Bleed Sunlit South African Sanctuary Photo Background */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             backgroundImage:
-              'url("https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=2000&q=80")',
+              'url("https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2000&q=85")',
             backgroundSize: 'cover',
-            backgroundPosition: 'center 35%',
-            filter: 'brightness(1.02)',
+            backgroundPosition: 'center 40%',
+            filter: 'brightness(1.05) saturate(1.05)',
             zIndex: 0,
           }}
         />
 
-        {/* Luminous Serene Sea Scrim (Airy Coastal Stillness) */}
+        {/* Luminous Serene Sea Scrim matching the calm coastal palette */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(180deg, rgba(16, 42, 54, 0.28) 0%, rgba(16, 42, 54, 0.10) 35%, rgba(14, 36, 48, 0.44) 100%)',
+              'linear-gradient(180deg, rgba(22, 64, 80, 0.46) 0%, rgba(28, 75, 92, 0.22) 38%, rgba(32, 80, 98, 0.38) 72%, rgba(243, 247, 250, 0.90) 94%, #F3F7FA 100%)',
             zIndex: 1,
           }}
         />
@@ -141,7 +141,7 @@ export const LandingPage: React.FC = () => {
               textShadow: '0 1px 8px rgba(0, 0, 0, 0.4)',
             }}
           >
-            Dignified temporary residences & dedicated professional wellbeing care across storied countryside, shorelines, and peaceful havens.
+            Dignified temporary residences & dedicated professional wellbeing care across storied South African countryside, shorelines, and peaceful havens.
           </p>
 
           {/* SIGNATURE THINKING TRAVELLER HORIZONTAL SEARCH BAR */}
@@ -158,7 +158,7 @@ export const LandingPage: React.FC = () => {
               overflow: 'hidden',
             }}
           >
-            {/* Cell 1: Region */}
+            {/* Cell 1: Select Province */}
             <div
               className="search-cell"
               style={{
@@ -176,7 +176,7 @@ export const LandingPage: React.FC = () => {
                   marginBottom: '4px',
                 }}
               >
-                Haven Region
+                Select Province
               </div>
               <select
                 value={selectedRegion}
@@ -189,15 +189,19 @@ export const LandingPage: React.FC = () => {
                   color: 'var(--text-heading)',
                   backgroundColor: 'transparent',
                   cursor: 'pointer',
+                  width: '100%',
                 }}
               >
-                <option value="all">All South African Havens</option>
-                <option value="winelands">Cape Winelands (Franschhoek & Stellenbosch)</option>
-                <option value="capetown">Cape Town & Atlantic Seaboard</option>
-                <option value="gardenroute">Garden Route & Knysna Forest</option>
-                <option value="drakensberg">Drakensberg Escarpment & Midlands</option>
-                <option value="overberg">Whale Coast (Hermanus & Walker Bay)</option>
-                <option value="mpumalanga">Panorama Route & Lowveld</option>
+                <option value="all">All 9 South African Provinces</option>
+                <option value="Western Cape">Western Cape (Cape Town, Winelands, Garden Route)</option>
+                <option value="KwaZulu-Natal">KwaZulu-Natal (Drakensberg, Midlands, Dolphin Coast)</option>
+                <option value="Eastern Cape">Eastern Cape (Wild Coast, Tsitsikamma, St Francis)</option>
+                <option value="Mpumalanga">Mpumalanga (Panorama Route, Blyde River Canyon)</option>
+                <option value="Gauteng">Gauteng (Cradle of Humankind, Magaliesberg)</option>
+                <option value="Limpopo">Limpopo (Waterberg, Magoebaskloof)</option>
+                <option value="North West">North West (Pilanesberg, Hartbeespoort)</option>
+                <option value="Free State">Free State (Clarens, Golden Gate)</option>
+                <option value="Northern Cape">Northern Cape (Karoo, Namaqualand)</option>
               </select>
             </div>
 
@@ -275,7 +279,7 @@ export const LandingPage: React.FC = () => {
               >
                 <option value="all">Caregiver Burnout & Transition</option>
                 <option value="bereavement">Grief & Bereavement</option>
-                <option value="crisis">Acute Stress & Housing Shift</option>
+                <option value="crisis">Acute Stress & Nervous System Reset</option>
                 <option value="redirection">Life & Career Redirection</option>
               </select>
             </div>
@@ -788,8 +792,8 @@ export const LandingPage: React.FC = () => {
             },
             {
               num: '04',
-              title: 'Transition & Future Pathway',
-              desc: 'Practical social work navigation for permanent tenancies, financial resets, and scheduled 90-day milestone follow-ups.',
+              title: 'Life Renewal & Sustained Wellbeing',
+              desc: 'Personal life coaching, holistic mindfulness integration, paced return-to-life roadmap, and scheduled 90-day wellbeing follow-ups.',
             },
           ].map((pillar) => (
             <div

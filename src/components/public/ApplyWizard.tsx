@@ -409,7 +409,7 @@ export const ApplyWizard: React.FC = () => {
                 </label>
                 <input
                   type="tel"
-                  placeholder="e.g. +44 7700 900482"
+                  placeholder="e.g. +27 82 555 0192"
                   value={formData.phone}
                   onChange={(e) => updateField('phone', e.target.value)}
                 />
@@ -417,11 +417,32 @@ export const ApplyWizard: React.FC = () => {
 
               <div>
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-main)', marginBottom: '6px' }}>
-                  Current City / Region
+                  South African Province *
+                </label>
+                <select
+                  value={(formData as any).province || 'Western Cape'}
+                  onChange={(e) => updateField('province', e.target.value)}
+                  style={{ padding: '11px', width: '100%', borderRadius: '10px', border: '1px solid var(--border-color)', backgroundColor: '#FFFFFF' }}
+                >
+                  <option value="Western Cape">Western Cape</option>
+                  <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                  <option value="Eastern Cape">Eastern Cape</option>
+                  <option value="Mpumalanga">Mpumalanga</option>
+                  <option value="Gauteng">Gauteng</option>
+                  <option value="Limpopo">Limpopo</option>
+                  <option value="North West">North West</option>
+                  <option value="Free State">Free State</option>
+                  <option value="Northern Cape">Northern Cape</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-main)', marginBottom: '6px' }}>
+                  Current City / Town
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Bristol, South West"
+                  placeholder="e.g. Cape Town / Franschhoek"
                   value={formData.city}
                   onChange={(e) => updateField('city', e.target.value)}
                 />
@@ -496,7 +517,7 @@ export const ApplyWizard: React.FC = () => {
                 style={{ padding: '11px' }}
               >
                 <option value="Severe Burnout & Caregiver Fatigue">Severe Burnout & Primary Caregiver Fatigue</option>
-                <option value="Sudden Housing Displacement / Eviction">Sudden Housing Displacement or Eviction</option>
+                <option value="Acute Life Stress & Nervous System Reset">Acute Life Stress & Nervous System Reset</option>
                 <option value="Domestic Transition & Safe Re-entry">Domestic Transition & Safe Re-entry</option>
                 <option value="Traumatic Bereavement & Loss">Traumatic Bereavement & Grief</option>
                 <option value="Medical Recovery & Convalescence">Medical Recovery & Convalescence</option>
@@ -537,7 +558,7 @@ export const ApplyWizard: React.FC = () => {
                 {[
                   { id: 'counselling', title: 'Clinical Counselling', desc: 'Trauma & grief psychology' },
                   { id: 'therapy', title: 'Somatic Regulation', desc: 'Breathwork & nervous system' },
-                  { id: 'social_work', title: 'Social Work & Housing', desc: 'Long-term tenancy support' },
+                  { id: 'restorative_mentorship', title: 'Restorative Mentorship', desc: 'Mindful path & life realignment' },
                   { id: 'wellness', title: 'Holistic Wellness & Nutrition', desc: 'Restorative meals & sleep' },
                   { id: 'coaching', title: 'Life Transitions Coaching', desc: 'Vocational clarity & boundaries' },
                   { id: 'healthcare', title: 'Medical Convalescence', desc: 'Doctor coordination & care' },

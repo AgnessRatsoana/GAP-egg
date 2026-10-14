@@ -56,8 +56,8 @@ export const AdminOverview: React.FC = () => {
       color: '#4A705B',
     },
     {
-      category: 'Social Work & Tenancy',
-      count: serviceRequests.filter((r) => r.serviceType === 'social_work').length + 3,
+      category: 'Restorative Mentorship',
+      count: serviceRequests.filter((r) => r.serviceType === 'restorative_mentorship').length + 3,
       color: '#3B6B55',
     },
     {

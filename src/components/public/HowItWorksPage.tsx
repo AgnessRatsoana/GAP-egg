@@ -33,7 +33,7 @@ export const HowItWorksPage: React.FC = () => {
     {
       step: '03',
       title: 'Clinical & Wellbeing Planning',
-      desc: 'Together with a chartered psychologist or senior social care lead, we design your month: quiet restorative convalescence, weekly trauma counselling, somatic nervous system reset, or practical tenancy search.',
+      desc: 'Together with a chartered psychologist or senior restorative care lead, we design your month: quiet restorative convalescence, weekly trauma counselling, somatic nervous system reset, or mindful life realignment.',
       timeframe: 'Gentle 1-on-1 alignment',
     },
     {
@@ -57,7 +57,7 @@ export const HowItWorksPage: React.FC = () => {
     {
       step: '07',
       title: 'Sustainable Transition & 90-Day Care',
-      desc: 'As your month draws to a close, your care manager supports your next steps: securing permanent housing, return-to-work pacing, and continuing therapy. We remain beside you with milestone follow-ups at 30, 60, and 90 days.',
+      desc: 'As your month draws to a close, your care manager supports your next steps: personal life realignment, mindful return-to-work pacing, and continuing therapy. We remain beside you with milestone follow-ups at 30, 60, and 90 days.',
       timeframe: 'Long-term support',
     },
   ];
