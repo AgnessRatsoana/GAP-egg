@@ -114,6 +114,8 @@ interface AppContextType {
   updatePropertyIssueStatus: (id: string, status: PropertyIssueStatus) => void;
   sendMessage: (content: string, recipientRole?: 'beneficiary' | 'admin') => void;
   updateGetToKnowMe: (beneficiaryId: string, data: GetToKnowMe) => void;
+  favorites: string[];
+  toggleFavorite: (propertyId: string) => void;
   resetAllData: () => void;
 }
 
@@ -174,6 +176,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [messages, setMessages] = useState<Message[]>(() =>
     loadInitial('messages', initialMessages)
   );
+  const [favorites, setFavorites] = useState<string[]>(() =>
+    loadInitial('favorites', ['prop-001', 'prop-004'])
+  );
+
+  const toggleFavorite = (propertyId: string) => {
+    setFavorites(prev =>
+      prev.includes(propertyId) ? prev.filter(id => id !== propertyId) : [...prev, propertyId]
+    );
+  };
 
   // Sync state to local storage
   useEffect(() => {
@@ -191,6 +202,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       localStorage.setItem('gapamonth_v6_clean_feedbacks', JSON.stringify(feedbacks));
       localStorage.setItem('gapamonth_v6_clean_followUps', JSON.stringify(followUps));
       localStorage.setItem('gapamonth_v6_clean_messages', JSON.stringify(messages));
+      localStorage.setItem('gapamonth_v6_clean_favorites', JSON.stringify(favorites));
     } catch {
       // storage quota or incognito fallback
     }
@@ -208,6 +220,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     feedbacks,
     followUps,
     messages,
+    favorites,
   ]);
 
   const setRole = (newRole: UserRole) => {
@@ -685,6 +698,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setFeedbacks(initialFeedbacks);
     setFollowUps(initialFollowUps);
     setMessages(initialMessages);
+    setFavorites(['prop-001', 'prop-004']);
   };
 
   return (
@@ -709,6 +723,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         feedbacks,
         followUps,
         messages,
+        favorites,
+        toggleFavorite,
         currentBeneficiary,
         currentBeneficiaryCheckins,
         currentBeneficiaryComfortRequests,

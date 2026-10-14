@@ -134,6 +134,16 @@ export interface Beneficiary {
   createdAt: string;
 }
 
+export interface Review {
+  id: string;
+  author: string;
+  avatar: string;
+  date: string;
+  rating: number;
+  content: string;
+  location?: string;
+}
+
 export interface Property {
   id: string;
   title: string;
@@ -157,6 +167,20 @@ export interface Property {
   currentBeneficiaryId?: string;
   inspectionNotes?: string;
   createdAt: string;
+
+  // Airbnb Features & Pricing (in ZAR)
+  nightlyPrice?: number;
+  monthlyRate?: number;
+  cleaningFee?: number;
+  serviceFee?: number;
+  rating?: number;
+  reviewCount?: number;
+  category?: string; // e.g. 'vineyards' | 'beachfront' | 'mountains' | 'forest' | 'countryside' | 'off_grid'
+  maxGuests?: number;
+  beds?: number;
+  isSuperhost?: boolean;
+  isGuestFavorite?: boolean;
+  reviews?: Review[];
 }
 
 export interface VerificationData {
