@@ -38,6 +38,34 @@ export const BeneficiaryDashboard: React.FC = () => {
     (s) => s.status === 'confirmed' || s.status === 'assigned'
   );
 
+  if (!currentBeneficiary) {
+    return (
+      <div className="animate-fade-in" style={{ textAlign: 'center', padding: '60px 24px', backgroundColor: '#FFFFFF', borderRadius: '16px', border: '1px solid var(--border-color)', maxWidth: '680px', margin: '40px auto' }}>
+        <Home size={42} style={{ color: 'var(--primary-forest)', marginBottom: '16px' }} />
+        <h2 className="font-serif" style={{ fontSize: '26px', color: 'var(--text-heading)', marginBottom: '10px' }}>
+          No Active Sanctuary Assignment
+        </h2>
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '24px' }}>
+          You do not have an active 30-day sanctuary stay assigned yet. Complete your identity & address verification or submit your confidential application to begin your journey.
+        </p>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setActiveView('portal-verification')}
+            className="btn-luxury-forest"
+          >
+            Complete ID & Biometrics
+          </button>
+          <button
+            onClick={() => setActiveView('apply')}
+            className="btn-luxury-outline"
+          >
+            Apply for a Month
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="animate-fade-in">
       {/* 1. Calm Sanctuary Banner (Warm Oat / Sage, Homely Tone) */}
@@ -69,18 +97,24 @@ export const BeneficiaryDashboard: React.FC = () => {
                 textTransform: 'uppercase',
               }}
             >
-              Active Sanctuary Stay
+              {currentBeneficiary.status.replace(/_/g, ' ')}
             </span>
-            <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-              18 Days of Quiet Rest Remaining
-            </span>
+            {currentBeneficiary.stayStartDate && currentBeneficiary.stayEndDate && (
+              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                Active Sanctuary Period
+              </span>
+            )}
           </div>
 
           <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
-            {currentBeneficiaryProperty?.title || 'Serenity Haven Cottage'}
+            {currentBeneficiaryProperty?.title || 'Sanctuary Matching in Progress'}
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-            Stay period: {currentBeneficiary?.stayStartDate || 'Oct 01, 2026'} — {currentBeneficiary?.stayEndDate || 'Oct 31, 2026'}
+            {currentBeneficiary.stayStartDate && currentBeneficiary.stayEndDate ? (
+              `Stay period: ${currentBeneficiary.stayStartDate} — ${currentBeneficiary.stayEndDate}`
+            ) : (
+              `Case registered for ${currentBeneficiary.name} • Location preference: ${currentBeneficiary.accommodationPreferences?.preferredLocation || currentBeneficiary.city}`
+            )}
           </p>
         </div>
 

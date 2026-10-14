@@ -14,51 +14,7 @@ import {
   PropertyIssue,
 } from '../types';
 
-export const initialBeneficiaries: Beneficiary[] = [
-  {
-    id: 'ben-001',
-    name: 'Sanctuary Guest',
-    email: 'guest@gapamonth.org',
-    phone: '+27 82 555 0192',
-    city: 'Western Cape, South Africa',
-    dateOfBirth: '1992-05-10',
-    emergencyContact: {
-      name: 'Nomsa Dlamini',
-      relationship: 'Family / Support Network',
-      phone: '+27 82 555 0199',
-    },
-    status: 'active_gap_month',
-    circumstances: 'A season to return to yourself',
-    narrative:
-      'Welcome to your private Gap Month space in South Africa. Breathe the clean fynbos air, rest without expectations, and take each day at your own gentle pace.',
-    urgencyLevel: 'standard',
-    supportNeeded: ['wellness', 'counselling'],
-    accommodationPreferences: {
-      preferredLocation: 'Franschhoek Valley or tranquil coastal haven',
-      accessibilityNeeds: 'None',
-      petConsiderations: 'None',
-      moveInDate: '2026-10-01',
-    },
-    stayStartDate: '2026-10-01',
-    stayEndDate: '2026-10-31',
-    assignedPropertyId: 'prop-001',
-    assignedPropertyName: 'La Provence Fynbos Sanctuary',
-    assignedBookingId: 'book-001',
-    allocatedBudget: 45000,
-    spentBudget: 0,
-    getToKnowMe: {
-      favouriteMeals: 'Warm country vegetable stew, fresh artisanal sourdough, roasted butternut soup, Cape apricot crumble.',
-      snacksAndDrinks: 'Organic Rooibos tea with raw honey, roasted macadamia nuts, sparkling mountain spring water.',
-      dietaryRestrictions: 'Vegetarian, sensitive to dairy.',
-      musicPreferences: 'Gentle acoustic guitar, African ambient nature sounds, soft piano melodies.',
-      booksAndMovies: 'Poetry, southern African nature writing, uplifting literature.',
-      hobbies: 'Journaling, quiet vineyard walks, botanical sketching, reading in the sun.',
-      personalCareScents: 'Cape fynbos, lavender, chamomile, unscented pure botanical soaps.',
-      preferredDailyActivities: 'Quiet mornings on the mountain veranda, peaceful afternoon walks among olive trees, starlit evenings by the hearth.',
-    },
-    createdAt: '2026-10-01T10:00:00Z',
-  },
-];
+export const initialBeneficiaries: Beneficiary[] = [];
 
 export const initialProperties: Property[] = [
   {
@@ -106,7 +62,6 @@ export const initialProperties: Property[] = [
     ],
     description:
       'A whitewashed Cape Dutch style cottage nestled beneath the majestic Franschhoek mountain peaks. Features fragrant lavender gardens, a private writing desk overlooking olive groves, and deep acoustic valley tranquility.',
-    currentBeneficiaryId: 'ben-001',
     inspectionNotes: 'Passed comprehensive safeguarding, privacy audit, and backup solar verification.',
     createdAt: '2026-07-15T09:00:00Z',
   },
@@ -422,20 +377,7 @@ export const initialProperties: Property[] = [
   },
 ];
 
-export const initialBookings: Booking[] = [
-  {
-    id: 'book-001',
-    beneficiaryId: 'ben-001',
-    beneficiaryName: 'Sanctuary Guest',
-    propertyId: 'prop-001',
-    propertyTitle: 'La Provence Fynbos Sanctuary',
-    startDate: '2026-10-01',
-    endDate: '2026-10-31',
-    status: 'confirmed',
-    notes: 'Sanctuary confirmed for your Gap Month stay in the Franschhoek Valley.',
-    createdAt: '2026-10-01T10:00:00Z',
-  },
-];
+export const initialBookings: Booking[] = [];
 
 export const initialServiceProviders: ServiceProvider[] = [
   {
@@ -492,23 +434,7 @@ export const initialServiceProviders: ServiceProvider[] = [
   },
 ];
 
-export const initialServiceRequests: ServiceRequest[] = [
-  {
-    id: 'req-001',
-    beneficiaryId: 'ben-001',
-    beneficiaryName: 'Sanctuary Guest',
-    serviceType: 'counselling',
-    preferredDate: '2026-10-18',
-    preferredTime: '14:00',
-    notes: 'Gentle check-in and introductory support session.',
-    urgency: 'standard',
-    status: 'confirmed',
-    providerId: 'prov-001',
-    providerName: 'Dr. Aris Thorne',
-    meetingLink: 'https://telehealth.gapamonth.org/room/session-intro',
-    createdAt: '2026-10-01T10:00:00Z',
-  },
-];
+export const initialServiceRequests: ServiceRequest[] = [];
 
 export const initialCheckins: WellbeingCheckin[] = [];
 
@@ -524,18 +450,4 @@ export const initialFeedbacks: Feedback[] = [];
 
 export const initialFollowUps: FollowUp[] = [];
 
-export const initialMessages: Message[] = [
-  {
-    id: 'msg-001',
-    conversationId: 'conv-guest',
-    senderId: 'admin-sarah',
-    senderName: 'Sarah Jenkins (Care Lead)',
-    senderRole: 'admin',
-    recipientId: 'ben-001',
-    recipientRole: 'beneficiary',
-    content:
-      'Welcome to Your Gap Month — a season to return to yourself. Take a deep breath. Your time here is completely yours, with zero expectations or obligations. Please let us know whenever you need anything at all.',
-    timestamp: '2026-10-01T10:00:00Z',
-    read: true,
-  },
-];
+export const initialMessages: Message[] = [];

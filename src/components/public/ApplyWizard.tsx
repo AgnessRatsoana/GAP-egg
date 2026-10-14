@@ -397,7 +397,7 @@ export const ApplyWizard: React.FC = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Amara Okafor"
+                  placeholder="e.g. Nomvula Khumalo"
                   value={formData.name}
                   onChange={(e) => updateField('name', e.target.value)}
                   required
@@ -410,7 +410,7 @@ export const ApplyWizard: React.FC = () => {
                 </label>
                 <input
                   type="email"
-                  placeholder="e.g. amara@example.com"
+                  placeholder="e.g. nomvula@example.co.za"
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   required

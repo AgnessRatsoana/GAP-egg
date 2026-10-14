@@ -37,9 +37,9 @@ export const AdminOverview: React.FC = () => {
 
   // Bookings breakdown for Donut Chart
   const bookingStats = {
-    active: bookings.filter((b) => b.status === 'active').length || 1,
-    confirmed: bookings.filter((b) => b.status === 'confirmed').length || 1,
-    completed: bookings.filter((b) => b.status === 'completed').length || 1,
+    active: bookings.filter((b) => b.status === 'active').length,
+    confirmed: bookings.filter((b) => b.status === 'confirmed').length,
+    completed: bookings.filter((b) => b.status === 'completed').length,
   };
   const totalBookingsCount = bookingStats.active + bookingStats.confirmed + bookingStats.completed;
 
@@ -47,32 +47,32 @@ export const AdminOverview: React.FC = () => {
   const serviceStats = [
     {
       category: 'Psychology & Counselling',
-      count: serviceRequests.filter((r) => r.serviceType === 'counselling').length + 5,
+      count: serviceRequests.filter((r) => r.serviceType === 'counselling').length,
       color: 'var(--primary-forest)',
     },
     {
       category: 'Somatic & Breathwork',
-      count: serviceRequests.filter((r) => r.serviceType === 'therapy').length + 4,
+      count: serviceRequests.filter((r) => r.serviceType === 'therapy').length,
       color: '#4A705B',
     },
     {
       category: 'Restorative Mentorship',
-      count: serviceRequests.filter((r) => r.serviceType === 'restorative_mentorship').length + 3,
+      count: serviceRequests.filter((r) => r.serviceType === 'restorative_mentorship').length,
       color: '#3B6B55',
     },
     {
       category: 'Holistic Wellness & Nutrition',
-      count: serviceRequests.filter((r) => r.serviceType === 'wellness').length + 3,
+      count: serviceRequests.filter((r) => r.serviceType === 'wellness').length,
       color: 'var(--accent-clay)',
     },
     {
       category: 'Life Coaching & Boundaries',
-      count: serviceRequests.filter((r) => r.serviceType === 'coaching').length + 2,
+      count: serviceRequests.filter((r) => r.serviceType === 'coaching').length,
       color: '#8C5C16',
     },
     {
       category: 'Medical Convalescence',
-      count: serviceRequests.filter((r) => r.serviceType === 'healthcare').length + 2,
+      count: serviceRequests.filter((r) => r.serviceType === 'healthcare').length,
       color: '#64748B',
     },
   ];
@@ -258,82 +258,90 @@ export const AdminOverview: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
-            {/* SVG Donut */}
-            <div style={{ position: 'relative', width: '170px', height: '170px' }}>
-              <svg width="170" height="170" viewBox="0 0 42 42">
-                <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="var(--bg-stone)" strokeWidth="4.5" />
-                <circle
-                  cx="21"
-                  cy="21"
-                  r="15.91549430918954"
-                  fill="transparent"
-                  stroke="#2D543E"
-                  strokeWidth="5"
-                  strokeDasharray={`${(bookingStats.active / totalBookingsCount) * 100} ${100 - (bookingStats.active / totalBookingsCount) * 100}`}
-                  strokeDashoffset="25"
-                  strokeLinecap="round"
-                />
-                <circle
-                  cx="21"
-                  cy="21"
-                  r="15.91549430918954"
-                  fill="transparent"
-                  stroke="#C07D5A"
-                  strokeWidth="5"
-                  strokeDasharray={`${(bookingStats.confirmed / totalBookingsCount) * 100} ${100 - (bookingStats.confirmed / totalBookingsCount) * 100}`}
-                  strokeDashoffset={`${25 - (bookingStats.active / totalBookingsCount) * 100}`}
-                  strokeLinecap="round"
-                />
-                <circle
-                  cx="21"
-                  cy="21"
-                  r="15.91549430918954"
-                  fill="transparent"
-                  stroke="#606C64"
-                  strokeWidth="5"
-                  strokeDasharray={`${(bookingStats.completed / totalBookingsCount) * 100} ${100 - (bookingStats.completed / totalBookingsCount) * 100}`}
-                  strokeDashoffset={`${25 - ((bookingStats.active + bookingStats.confirmed) / totalBookingsCount) * 100}`}
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <span style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-main)' }}>100%</span>
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Active</span>
+          {totalBookingsCount > 0 ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+              {/* SVG Donut */}
+              <div style={{ position: 'relative', width: '170px', height: '170px' }}>
+                <svg width="170" height="170" viewBox="0 0 42 42">
+                  <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="var(--bg-stone)" strokeWidth="4.5" />
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.91549430918954"
+                    fill="transparent"
+                    stroke="#2D543E"
+                    strokeWidth="5"
+                    strokeDasharray={`${(bookingStats.active / totalBookingsCount) * 100} ${100 - (bookingStats.active / totalBookingsCount) * 100}`}
+                    strokeDashoffset="25"
+                    strokeLinecap="round"
+                  />
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.91549430918954"
+                    fill="transparent"
+                    stroke="#C07D5A"
+                    strokeWidth="5"
+                    strokeDasharray={`${(bookingStats.confirmed / totalBookingsCount) * 100} ${100 - (bookingStats.confirmed / totalBookingsCount) * 100}`}
+                    strokeDashoffset={`${25 - (bookingStats.active / totalBookingsCount) * 100}`}
+                    strokeLinecap="round"
+                  />
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.91549430918954"
+                    fill="transparent"
+                    stroke="#606C64"
+                    strokeWidth="5"
+                    strokeDasharray={`${(bookingStats.completed / totalBookingsCount) * 100} ${100 - (bookingStats.completed / totalBookingsCount) * 100}`}
+                    strokeDashoffset={`${25 - ((bookingStats.active + bookingStats.confirmed) / totalBookingsCount) * 100}`}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-main)' }}>
+                    {totalBookingsCount}
+                  </span>
+                  <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Total</span>
+                </div>
               </div>
-            </div>
 
-            {/* Legend */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#2D543E' }} />
-                <span style={{ fontSize: '13px', color: 'var(--text-body)' }}>
-                  Active Sanctuary ({bookingStats.active})
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#C07D5A' }} />
-                <span style={{ fontSize: '13px', color: 'var(--text-body)' }}>
-                  Confirmed Upcoming ({bookingStats.confirmed})
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#606C64' }} />
-                <span style={{ fontSize: '13px', color: 'var(--text-body)' }}>
-                  Restored & Completed ({bookingStats.completed})
-                </span>
+              {/* Legend */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#2D543E' }} />
+                  <span style={{ fontSize: '13px', color: 'var(--text-body)' }}>
+                    Active Sanctuary ({bookingStats.active})
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#C07D5A' }} />
+                  <span style={{ fontSize: '13px', color: 'var(--text-body)' }}>
+                    Confirmed Upcoming ({bookingStats.confirmed})
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: '#606C64' }} />
+                  <span style={{ fontSize: '13px', color: 'var(--text-body)' }}>
+                    Restored & Completed ({bookingStats.completed})
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div style={{ padding: '36px 16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px' }}>
+              No sanctuary stays recorded yet. When guest applications are approved and assigned, stay metrics will reflect in real time.
+            </div>
+          )}
         </div>
 
         {/* Support Services Breakdown */}

@@ -69,37 +69,49 @@ export const BeneficiaryPortal: React.FC = () => {
               marginBottom: '4px',
             }}
           >
-            Welcome, {currentBeneficiary?.name || 'Sanctuary Guest'}.
+            {currentBeneficiary ? `Welcome, ${currentBeneficiary.name}.` : 'Welcome to Your Sanctuary Portal.'}
           </h1>
           <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-            Staying at <strong>{currentBeneficiary?.assignedPropertyName || 'La Provence Fynbos Sanctuary'}</strong> • Day 14 of 30
+            {currentBeneficiary?.assignedPropertyName ? (
+              <>
+                Staying at <strong>{currentBeneficiary.assignedPropertyName}</strong> • Active Sanctuary Stay
+              </>
+            ) : currentBeneficiary ? (
+              <>
+                Application Status: <strong>{currentBeneficiary.status.replace(/_/g, ' ')}</strong> • Intake & Vetting In Progress
+              </>
+            ) : (
+              'Complete your ID verification or apply for an upcoming 30-day sanctuary stay.'
+            )}
           </p>
         </div>
 
-        {/* Discreet Switcher for Testing Other Beneficiary Cases */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '12px', color: 'var(--text-subtle)' }}>Switch Beneficiary:</span>
-          <select
-            value={currentBeneficiary?.id}
-            onChange={(e) => setCurrentBeneficiaryId(e.target.value)}
-            style={{
-              padding: '6px 12px',
-              borderRadius: '8px',
-              fontSize: '12px',
-              fontWeight: 600,
-              backgroundColor: '#FFFFFF',
-              border: '1px solid var(--border-color)',
-              color: 'var(--text-main)',
-              width: 'auto',
-            }}
-          >
-            {beneficiaries.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.name} ({b.status.replace(/_/g, ' ')})
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Discreet Switcher (only shown if multiple cases exist) */}
+        {beneficiaries.length > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text-subtle)' }}>Switch Beneficiary:</span>
+            <select
+              value={currentBeneficiary?.id}
+              onChange={(e) => setCurrentBeneficiaryId(e.target.value)}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                fontSize: '12px',
+                fontWeight: 600,
+                backgroundColor: '#FFFFFF',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-main)',
+                width: 'auto',
+              }}
+            >
+              {beneficiaries.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name} ({b.status.replace(/_/g, ' ')})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {/* Homely, Clear Sub-navigation Tabs */}

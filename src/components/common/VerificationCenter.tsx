@@ -40,33 +40,31 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
 }) => {
   // Step 1: ID
   const [idType, setIdType] = useState<'sa_id' | 'passport'>('sa_id');
-  const [idNumber, setIdNumber] = useState('9205105089084');
-  const [idDocName, setIdDocName] = useState<string | null>('RSA_Smart_ID_Front.jpg');
+  const [idNumber, setIdNumber] = useState('');
+  const [idDocName, setIdDocName] = useState<string | null>(null);
   const [isVerifyingId, setIsVerifyingId] = useState(false);
-  const [idVerified, setIdVerified] = useState(true);
+  const [idVerified, setIdVerified] = useState(false);
 
   // Step 2: Address
-  const [residentialAddress, setResidentialAddress] = useState('14 Uitkyk Pass');
-  const [suburb, setSuburb] = useState('Franschhoek');
-  const [city, setCity] = useState('Cape Winelands');
+  const [residentialAddress, setResidentialAddress] = useState('');
+  const [suburb, setSuburb] = useState('');
+  const [city, setCity] = useState('');
   const [province, setProvince] = useState('Western Cape');
-  const [postalCode, setPostalCode] = useState('7690');
-  const [proofDocName, setProofDocName] = useState<string | null>('Municipal_Rates_Statement.pdf');
+  const [postalCode, setPostalCode] = useState('');
+  const [proofDocName, setProofDocName] = useState<string | null>(null);
   const [isVerifyingAddress, setIsVerifyingAddress] = useState(false);
-  const [addressVerified, setAddressVerified] = useState(true);
+  const [addressVerified, setAddressVerified] = useState(false);
 
   // Step 3: Face Recognition
-  const [facePhoto, setFacePhoto] = useState<string | null>(
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
-  );
+  const [facePhoto, setFacePhoto] = useState<string | null>(null);
   const [isScanningFace, setIsScanningFace] = useState(false);
-  const [faceScanProgress, setFaceScanProgress] = useState(100);
-  const [faceVerified, setFaceVerified] = useState(true);
-  const [faceMatchScore, setFaceMatchScore] = useState(98.6);
+  const [faceScanProgress, setFaceScanProgress] = useState(0);
+  const [faceVerified, setFaceVerified] = useState(false);
+  const [faceMatchScore, setFaceMatchScore] = useState(0);
   const [livenessCheck, setLivenessCheck] = useState({
-    blinkTest: true,
-    headTilt: true,
-    lighting: true,
+    blinkTest: false,
+    headTilt: false,
+    lighting: false,
   });
   const [cameraActive, setCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -87,6 +85,10 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
   };
 
   const captureFaceAndScan = () => {
+    if (!cameraActive && !facePhoto) {
+      alert('Please start your camera or upload a selfie photo to perform biometric scanning.');
+      return;
+    }
     setIsScanningFace(true);
     setFaceScanProgress(0);
 
@@ -108,14 +110,14 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
           if (onVerificationComplete) {
             onVerificationComplete({
               idType,
-              idNumber,
+              idNumber: idNumber.trim(),
               idDocumentName: idDocName || 'South_African_ID.jpg',
               idVerified: true,
-              residentialAddress,
-              suburb,
-              city,
+              residentialAddress: residentialAddress.trim(),
+              suburb: suburb.trim(),
+              city: city.trim(),
               province,
-              postalCode,
+              postalCode: postalCode.trim(),
               proofOfAddressDocName: proofDocName || 'Proof_of_Residence.pdf',
               addressVerified: true,
               facePhotoData: facePhoto || undefined,
@@ -134,6 +136,19 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
   };
 
   const handleIdVerify = () => {
+    const cleanId = idNumber.trim().replace(/\s/g, '');
+    if (!cleanId) {
+      alert('Please enter your 13-digit South African ID number or passport number.');
+      return;
+    }
+    if (idType === 'sa_id' && cleanId.length !== 13) {
+      alert('A South African ID number must be exactly 13 digits.');
+      return;
+    }
+    if (!idDocName) {
+      alert('Please upload a copy of your ID document or passport photo.');
+      return;
+    }
     setIsVerifyingId(true);
     setTimeout(() => {
       setIsVerifyingId(false);
@@ -142,6 +157,14 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
   };
 
   const handleAddressVerify = () => {
+    if (!residentialAddress.trim() || !city.trim()) {
+      alert('Please enter your residential street address and city.');
+      return;
+    }
+    if (!proofDocName) {
+      alert('Please upload your proof of residence (e.g. municipal account, bank statement, or utility bill).');
+      return;
+    }
     setIsVerifyingAddress(true);
     setTimeout(() => {
       setIsVerifyingAddress(false);
@@ -328,24 +351,39 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               />
             </div>
 
-            <div
+            <label
               style={{
-                border: '1px dashed var(--border-water)',
+                display: 'block',
+                border: idDocName ? '1.5px solid var(--color-water)' : '1px dashed var(--border-water)',
                 borderRadius: '6px',
-                padding: '12px',
+                padding: '14px 12px',
                 textAlign: 'center',
-                backgroundColor: '#FFFFFF',
+                backgroundColor: idDocName ? 'var(--bg-serene-water)' : '#FFFFFF',
                 marginBottom: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.18s ease',
               }}
             >
-              <FileText size={20} style={{ color: 'var(--color-water)', marginBottom: '4px' }} />
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setIdDocName(file.name);
+                    setIdVerified(false);
+                  }
+                }}
+              />
+              <FileText size={22} style={{ color: 'var(--color-water)', marginBottom: '4px' }} />
               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-heading)' }}>
-                {idDocName || 'Smart ID or Passport Photo'}
+                {idDocName || 'Browse & Upload ID / Passport'}
               </div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                Upload Front & Back of Smart ID Card or Passport
+                {idDocName ? 'Click to select a different file' : 'Click to select Smart ID or Passport file (PDF, JPG, PNG)'}
               </div>
-            </div>
+            </label>
           </div>
 
           <button
@@ -513,24 +551,39 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               </select>
             </div>
 
-            <div
+            <label
               style={{
-                border: '1px dashed var(--color-brown-border)',
+                display: 'block',
+                border: proofDocName ? '1.5px solid var(--color-brown)' : '1px dashed var(--color-brown-border)',
                 borderRadius: '6px',
-                padding: '10px',
+                padding: '12px 10px',
                 textAlign: 'center',
-                backgroundColor: '#FFFFFF',
+                backgroundColor: proofDocName ? 'var(--bg-serene-warm)' : '#FFFFFF',
                 marginBottom: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.18s ease',
               }}
             >
-              <MapPin size={18} style={{ color: 'var(--color-brown)', marginBottom: '2px' }} />
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setProofDocName(file.name);
+                    setAddressVerified(false);
+                  }
+                }}
+              />
+              <MapPin size={20} style={{ color: 'var(--color-brown)', marginBottom: '2px' }} />
               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-heading)' }}>
-                {proofDocName || 'Municipal Utility Bill or Bank Statement'}
+                {proofDocName || 'Browse & Upload Proof of Residence'}
               </div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                Official document not older than 3 months
+                {proofDocName ? 'Click to select a different file' : 'Municipal rates bill, utility statement or bank statement (max 3 months)'}
               </div>
-            </div>
+            </label>
           </div>
 
           <button
@@ -745,31 +798,67 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {!cameraActive && (
-              <button
-                type="button"
-                onClick={startCamera}
-                style={{
-                  flex: 1,
-                  padding: '10px',
-                  backgroundColor: '#FFFFFF',
-                  color: 'var(--text-heading)',
-                  border: '1px solid var(--border-stone-gold)',
-                  borderRadius: '6px',
-                  fontSize: '11px',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '4px',
-                }}
-              >
-                <Camera size={13} /> {cameraActive ? 'Camera Active' : 'Start Camera'}
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={startCamera}
+                  style={{
+                    flex: '1 1 120px',
+                    padding: '10px',
+                    backgroundColor: '#FFFFFF',
+                    color: 'var(--text-heading)',
+                    border: '1px solid var(--border-stone-gold)',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  <Camera size={13} /> {cameraActive ? 'Camera Active' : 'Start Camera'}
+                </button>
+
+                <label
+                  style={{
+                    flex: '1 1 120px',
+                    padding: '10px',
+                    backgroundColor: '#FFFFFF',
+                    color: 'var(--text-heading)',
+                    border: '1px solid var(--border-stone-gold)',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setFacePhoto(URL.createObjectURL(file));
+                        setFaceVerified(false);
+                      }
+                    }}
+                  />
+                  <Upload size={13} /> Upload Selfie
+                </label>
+              </>
             )}
 
             <button

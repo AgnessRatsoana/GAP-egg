@@ -315,8 +315,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={
                       loginRole === 'beneficiary'
-                        ? 'amara.okafor@gapamonth.org'
-                        : 'sarah.jenkins@gapamonth.org'
+                        ? 'guest@gapamonth.org.za'
+                        : 'admin@gapamonth.org.za'
                     }
                     style={{ paddingLeft: '38px' }}
                   />
@@ -362,7 +362,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 Sign In to Portal <ArrowRight size={14} />
               </button>
 
-              {/* 1-Click Demo Logins for effortless review */}
+              {/* 1-Click Quick Access for review */}
               <div
                 style={{
                   padding: '14px',
@@ -400,7 +400,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       border: '1px solid var(--color-green-border)',
                     }}
                   >
-                    Demo Guest (Amara)
+                    Guest Portal
                   </button>
                   <button
                     type="button"
@@ -416,7 +416,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       border: '1px solid var(--color-brown-border)',
                     }}
                   >
-                    Demo Admin (Sarah)
+                    Admin Console
                   </button>
                 </div>
               </div>

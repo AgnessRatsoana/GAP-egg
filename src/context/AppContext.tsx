@@ -123,12 +123,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Navigation & Role states
   const [role, setRoleState] = useState<UserRole>('public');
   const [activeView, setActiveView] = useState<string>('landing');
-  const [currentBeneficiaryId, setCurrentBeneficiaryId] = useState<string>('ben-001');
+  const [currentBeneficiaryId, setCurrentBeneficiaryId] = useState<string>('');
 
   // Load from LocalStorage or initialize with mock data
   const loadInitial = <T,>(key: string, fallback: T): T => {
     try {
-      const stored = localStorage.getItem(`gapamonth_v5_sa_${key}`);
+      const stored = localStorage.getItem(`gapamonth_v6_clean_${key}`);
       return stored ? JSON.parse(stored) : fallback;
     } catch {
       return fallback;
@@ -178,19 +178,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Sync state to local storage
   useEffect(() => {
     try {
-      localStorage.setItem('gapamonth_v5_sa_beneficiaries', JSON.stringify(beneficiaries));
-      localStorage.setItem('gapamonth_v5_sa_properties', JSON.stringify(properties));
-      localStorage.setItem('gapamonth_v5_sa_bookings', JSON.stringify(bookings));
-      localStorage.setItem('gapamonth_v5_sa_serviceProviders', JSON.stringify(serviceProviders));
-      localStorage.setItem('gapamonth_v5_sa_serviceRequests', JSON.stringify(serviceRequests));
-      localStorage.setItem('gapamonth_v5_sa_checkins', JSON.stringify(checkins));
-      localStorage.setItem('gapamonth_v5_sa_comfortRequests', JSON.stringify(comfortRequests));
-      localStorage.setItem('gapamonth_v5_sa_safetyAlerts', JSON.stringify(safetyAlerts));
-      localStorage.setItem('gapamonth_v5_sa_propertyIssues', JSON.stringify(propertyIssues));
-      localStorage.setItem('gapamonth_v5_sa_expenses', JSON.stringify(expenses));
-      localStorage.setItem('gapamonth_v5_sa_feedbacks', JSON.stringify(feedbacks));
-      localStorage.setItem('gapamonth_v5_sa_followUps', JSON.stringify(followUps));
-      localStorage.setItem('gapamonth_v5_sa_messages', JSON.stringify(messages));
+      localStorage.setItem('gapamonth_v6_clean_beneficiaries', JSON.stringify(beneficiaries));
+      localStorage.setItem('gapamonth_v6_clean_properties', JSON.stringify(properties));
+      localStorage.setItem('gapamonth_v6_clean_bookings', JSON.stringify(bookings));
+      localStorage.setItem('gapamonth_v6_clean_serviceProviders', JSON.stringify(serviceProviders));
+      localStorage.setItem('gapamonth_v6_clean_serviceRequests', JSON.stringify(serviceRequests));
+      localStorage.setItem('gapamonth_v6_clean_checkins', JSON.stringify(checkins));
+      localStorage.setItem('gapamonth_v6_clean_comfortRequests', JSON.stringify(comfortRequests));
+      localStorage.setItem('gapamonth_v6_clean_safetyAlerts', JSON.stringify(safetyAlerts));
+      localStorage.setItem('gapamonth_v6_clean_propertyIssues', JSON.stringify(propertyIssues));
+      localStorage.setItem('gapamonth_v6_clean_expenses', JSON.stringify(expenses));
+      localStorage.setItem('gapamonth_v6_clean_feedbacks', JSON.stringify(feedbacks));
+      localStorage.setItem('gapamonth_v6_clean_followUps', JSON.stringify(followUps));
+      localStorage.setItem('gapamonth_v6_clean_messages', JSON.stringify(messages));
     } catch {
       // storage quota or incognito fallback
     }
@@ -654,8 +654,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           senderRole: 'admin',
           recipientId: ben.id,
           recipientRole: 'beneficiary',
-          content:
-            'Thank you for reaching out, Amara. We have received your note and are reviewing it with your dedicated care circle right now. Please take gentle care.',
+          content: `Thank you for reaching out${ben.name ? `, ${ben.name}` : ''}. We have received your note and are reviewing it with your dedicated care circle right now. Please take gentle care.`,
           timestamp: new Date().toISOString(),
           read: false,
         };
@@ -672,6 +671,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const resetAllData = () => {
     localStorage.clear();
+    setCurrentBeneficiaryId('');
     setBeneficiaries(initialBeneficiaries);
     setProperties(initialProperties);
     setBookings(initialBookings);

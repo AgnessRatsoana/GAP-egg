@@ -231,10 +231,10 @@ export const Navbar: React.FC = () => {
                       fontSize: '11px',
                     }}
                   >
-                    {currentBeneficiary?.name[0] || 'A'}
+                    {currentBeneficiary?.name?.[0] || 'G'}
                   </div>
                   <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-green)' }}>
-                    {currentBeneficiary?.name || 'Amara Okafor'}
+                    {currentBeneficiary?.name || 'Sanctuary Guest'}
                   </span>
                 </button>
 

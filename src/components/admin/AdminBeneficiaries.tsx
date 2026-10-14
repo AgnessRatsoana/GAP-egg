@@ -26,7 +26,9 @@ export const AdminBeneficiaries: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [selectedBenId, setSelectedBenId] = useState<string | null>(currentBeneficiaryId || 'ben-001');
+  const [selectedBenId, setSelectedBenId] = useState<string | null>(
+    currentBeneficiaryId || (beneficiaries[0]?.id ?? null)
+  );
 
   // Case Drawer tabs
   const [drawerTab, setDrawerTab] = useState<'case' | 'matching' | 'preferences' | 'finances' | 'checkins'>('case');
