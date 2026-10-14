@@ -9,6 +9,8 @@ import {
   CheckCircle2,
   Heart,
   Shield,
+  Sun,
+  Feather,
 } from 'lucide-react';
 
 export const WellbeingCheckinView: React.FC = () => {
@@ -30,11 +32,11 @@ export const WellbeingCheckinView: React.FC = () => {
   const [escalationConfirmed, setEscalationConfirmed] = useState(false);
 
   const moodOptions = [
-    { value: 5 as const, emoji: '😄', label: 'Very Good & Peaceful', color: '#1E5C37', bg: '#E3F2E7' },
-    { value: 4 as const, emoji: '🙂', label: 'Calm & Rested', color: '#2D543E', bg: '#EBF3EE' },
-    { value: 3 as const, emoji: '😐', label: 'Okay / Unwinding', color: '#8C5C16', bg: '#FEF4DC' },
-    { value: 2 as const, emoji: '😔', label: 'Struggling a Bit', color: '#B45309', bg: '#FDF2E2' },
-    { value: 1 as const, emoji: '😢', label: 'In Distress', color: '#9E2B25', bg: '#FBECEB' },
+    { value: 5 as const, icon: Sun, label: 'Very Good & Peaceful', color: '#1E5C37', bg: '#E3F2E7' },
+    { value: 4 as const, icon: Smile, label: 'Calm & Rested', color: '#2D543E', bg: '#EBF3EE' },
+    { value: 3 as const, icon: Meh, label: 'Okay / Unwinding', color: '#8C5C16', bg: '#FEF4DC' },
+    { value: 2 as const, icon: Frown, label: 'Struggling a Bit', color: '#B45309', bg: '#FDF2E2' },
+    { value: 1 as const, icon: AlertTriangle, label: 'In Distress', color: '#9E2B25', bg: '#FBECEB' },
   ];
 
   const handleCheckinSubmit = (e: React.FormEvent) => {
@@ -148,7 +150,9 @@ export const WellbeingCheckinView: React.FC = () => {
                   boxShadow: isSelected ? 'var(--shadow-sm)' : 'none',
                 }}
               >
-                <span style={{ fontSize: '36px', marginBottom: '8px', lineHeight: 1 }}>{opt.emoji}</span>
+                <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <opt.icon size={28} color={opt.color} />
+                </div>
                 <span
                   style={{
                     fontSize: '12px',
@@ -249,7 +253,7 @@ export const WellbeingCheckinView: React.FC = () => {
               fontSize: '14px',
             }}
           >
-            <div style={{ fontSize: '28px', marginBottom: '8px' }}>🌱</div>
+            <Feather size={28} color="var(--primary-forest)" style={{ marginBottom: '8px' }} />
             <div style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
               Your sanctuary reflections begin today
             </div>
@@ -273,7 +277,6 @@ export const WellbeingCheckinView: React.FC = () => {
             >
               <div
                 style={{
-                  fontSize: '30px',
                   backgroundColor: matchOpt.bg,
                   width: '48px',
                   height: '48px',
@@ -284,7 +287,7 @@ export const WellbeingCheckinView: React.FC = () => {
                   flexShrink: 0,
                 }}
               >
-                {matchOpt.emoji}
+                <matchOpt.icon size={22} color={matchOpt.color} />
               </div>
 
               <div style={{ flex: 1 }}>

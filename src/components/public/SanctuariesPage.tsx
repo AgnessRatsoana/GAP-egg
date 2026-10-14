@@ -224,9 +224,12 @@ export const SanctuariesPage: React.FC = () => {
                         padding: '4px 10px',
                         borderRadius: '3px',
                         border: '1px solid var(--border-subtle)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
                       }}
                     >
-                      ✓ {am}
+                      <Check size={11} /> {am}
                     </span>
                   ))}
                 </div>

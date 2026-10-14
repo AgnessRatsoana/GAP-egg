@@ -10,6 +10,7 @@ import {
   Video,
   CheckCircle2,
   AlertCircle,
+  X,
 } from 'lucide-react';
 
 export const MySupportView: React.FC = () => {
@@ -229,8 +230,12 @@ export const MySupportView: React.FC = () => {
               <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)' }}>
                 Request Support Consultation
               </h3>
-              <button onClick={() => setShowModal(false)} style={{ background: 'none', fontSize: '18px', color: 'var(--text-muted)' }}>
-                ✕
+              <button
+                onClick={() => setShowModal(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+                aria-label="Close"
+              >
+                <X size={18} />
               </button>
             </div>
 

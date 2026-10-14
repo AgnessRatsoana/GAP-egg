@@ -12,6 +12,7 @@ import {
   Home,
   Scale,
   UserCheck,
+  Check,
 } from 'lucide-react';
 import { VerificationCenter } from '../common/VerificationCenter';
 import { SanctuaryPoliciesModal } from '../common/SanctuaryPoliciesModal';
@@ -340,7 +341,7 @@ export const ApplyWizard: React.FC = () => {
                   fontWeight: 700,
                 }}
               >
-                {step > item.num ? '✓' : item.num}
+                {step > item.num ? <Check size={12} strokeWidth={3} /> : item.num}
               </div>
               <span
                 style={{
