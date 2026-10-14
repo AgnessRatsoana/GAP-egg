@@ -361,6 +361,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       description: data.description || 'A restful and quiet home offered for the Gap a Month programme.',
       createdAt: new Date().toISOString(),
       ...data,
+      province: data.province || 'Western Cape',
     };
 
     setProperties((prev) => [newProp, ...prev]);
