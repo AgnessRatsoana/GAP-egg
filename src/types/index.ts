@@ -131,6 +131,12 @@ export interface Beneficiary {
   allocatedBudget: number;
   spentBudget: number;
   getToKnowMe?: GetToKnowMe;
+  verificationData?: VerificationData;
+  isIdentityVerified?: boolean;
+  securityClearanceCode?: string;
+  twoFactorEnabled?: boolean;
+  popiaConsentDate?: string;
+  keypadUnlocked?: boolean;
   createdAt: string;
 }
 
