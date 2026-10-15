@@ -25,6 +25,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
 }) => {
   const {
+    activeView,
     setRole,
     setActiveView,
     beneficiaries,
@@ -72,20 +73,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         setCurrentBeneficiaryId(created.id);
       }
       setRole('beneficiary');
-      setActiveView('portal-dashboard');
+      if (activeView === 'apply') {
+        setActiveView('apply');
+      } else {
+        setActiveView('portal-dashboard');
+      }
     }
-    onClose();
-  };
-
-  const handleQuickDemoBeneficiary = () => {
-    setRole('beneficiary');
-    setActiveView('portal-dashboard');
-    onClose();
-  };
-
-  const handleQuickDemoAdmin = () => {
-    setRole('admin');
-    setActiveView('admin-overview');
     onClose();
   };
 
@@ -98,7 +91,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       });
       setCurrentBeneficiaryId(created.id);
       setRole('beneficiary');
-      setActiveView('portal-dashboard');
+      if (activeView === 'apply') {
+        setActiveView('apply');
+      } else {
+        setActiveView('portal-dashboard');
+      }
     } else {
       setRole('public');
       setActiveView('offer-home');
@@ -361,65 +358,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               >
                 Sign In to Portal <ArrowRight size={14} />
               </button>
-
-              {/* 1-Click Quick Access for review */}
-              <div
-                style={{
-                  padding: '14px',
-                  borderRadius: '6px',
-                  backgroundColor: 'var(--bg-beige)',
-                  border: '1px solid var(--border-stone-gold)',
-                  marginBottom: '16px',
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: '10px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-brown)',
-                    fontWeight: 700,
-                    marginBottom: '8px',
-                    textAlign: 'center',
-                  }}
-                >
-                  Quick Demo Access
-                </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <button
-                    type="button"
-                    onClick={handleQuickDemoBeneficiary}
-                    style={{
-                      flex: 1,
-                      padding: '8px 10px',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      borderRadius: '4px',
-                      backgroundColor: '#FFFFFF',
-                      color: 'var(--color-green)',
-                      border: '1px solid var(--color-green-border)',
-                    }}
-                  >
-                    Guest Portal
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleQuickDemoAdmin}
-                    style={{
-                      flex: 1,
-                      padding: '8px 10px',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      borderRadius: '4px',
-                      backgroundColor: '#FFFFFF',
-                      color: 'var(--color-brown)',
-                      border: '1px solid var(--color-brown-border)',
-                    }}
-                  >
-                    Admin Console
-                  </button>
-                </div>
-              </div>
 
               <div style={{ textAlign: 'center', fontSize: '13px', color: 'var(--text-muted)' }}>
                 Don't have an account yet?{' '}

@@ -176,6 +176,23 @@ export const Navbar: React.FC = () => {
               >
                 Offer A Haven
               </button>
+              <button
+                onClick={() => {
+                  setActiveView('apply');
+                }}
+                style={{
+                  background: 'none',
+                  color: activeView === 'apply' ? 'var(--text-heading)' : 'var(--text-muted)',
+                  fontWeight: activeView === 'apply' ? 700 : 500,
+                  borderBottom: activeView === 'apply' ? '1.5px solid var(--text-heading)' : '1.5px solid transparent',
+                  paddingBottom: '4px',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  fontSize: '12px',
+                }}
+              >
+                Apply for a Stay
+              </button>
             </div>
 
             {/* Auth Actions: Sign In & Register (When Public) */}
@@ -452,7 +469,6 @@ export const Navbar: React.FC = () => {
 
               <button
                 onClick={() => {
-                  if (role !== 'public') setRole('public');
                   setActiveView('apply');
                   setMobileMenuOpen(false);
                 }}

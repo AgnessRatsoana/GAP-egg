@@ -436,34 +436,40 @@ export const AdminOverview: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {beneficiaries.slice(0, 4).map((ben) => (
-              <div
-                key={ben.id}
-                onClick={() => {
-                  setCurrentBeneficiaryId(ben.id);
-                  setActiveView('admin-beneficiaries');
-                }}
-                className="card-hover"
-                style={{
-                  padding: '14px 16px',
-                  borderRadius: '12px',
-                  backgroundColor: 'var(--bg-warm)',
-                  border: '1px solid var(--border-color)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>{ben.name}</div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                    {ben.circumstances} • {ben.city}
-                  </div>
-                </div>
-                <StatusPill status={ben.status} size="sm" />
+            {beneficiaries.length === 0 ? (
+              <div style={{ padding: '28px 16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px' }}>
+                No applications submitted yet. Guest applications will appear here automatically upon submission.
               </div>
-            ))}
+            ) : (
+              beneficiaries.slice(0, 4).map((ben) => (
+                <div
+                  key={ben.id}
+                  onClick={() => {
+                    setCurrentBeneficiaryId(ben.id);
+                    setActiveView('admin-beneficiaries');
+                  }}
+                  className="card-hover"
+                  style={{
+                    padding: '14px 16px',
+                    borderRadius: '12px',
+                    backgroundColor: 'var(--bg-warm)',
+                    border: '1px solid var(--border-color)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>{ben.name}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                      {ben.circumstances} • {ben.city}
+                    </div>
+                  </div>
+                  <StatusPill status={ben.status} size="sm" />
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -495,33 +501,39 @@ export const AdminOverview: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {bookings.map((bk) => (
-              <div
-                key={bk.id}
-                style={{
-                  padding: '14px 16px',
-                  borderRadius: '12px',
-                  backgroundColor: 'var(--bg-warm)',
-                  border: '1px solid var(--border-color)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>
-                    {bk.beneficiaryName}
-                  </div>
-                  <div style={{ fontSize: '12px', color: 'var(--primary-forest)', fontWeight: 600 }}>
-                    {bk.propertyTitle}
-                  </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                    {bk.startDate} to {bk.endDate}
-                  </div>
-                </div>
-                <StatusPill status={bk.status} size="sm" />
+            {bookings.length === 0 ? (
+              <div style={{ padding: '28px 16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px' }}>
+                No active arrivals scheduled yet. Once sanctuary applications are matched and confirmed, bookings will appear here.
               </div>
-            ))}
+            ) : (
+              bookings.map((bk) => (
+                <div
+                  key={bk.id}
+                  style={{
+                    padding: '14px 16px',
+                    borderRadius: '12px',
+                    backgroundColor: 'var(--bg-warm)',
+                    border: '1px solid var(--border-color)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>
+                      {bk.beneficiaryName}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--primary-forest)', fontWeight: 600 }}>
+                      {bk.propertyTitle}
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                      {bk.startDate} to {bk.endDate}
+                    </div>
+                  </div>
+                  <StatusPill status={bk.status} size="sm" />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

@@ -273,23 +273,31 @@ export const AdminFinance: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {expenses.map((exp) => (
-                    <tr key={exp.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td style={{ padding: '14px 20px', fontWeight: 600, color: 'var(--text-main)' }}>
-                        {exp.beneficiaryName}
-                      </td>
-                      <td style={{ padding: '14px 20px' }}>
-                        <StatusPill status={exp.category} size="sm" />
-                      </td>
-                      <td style={{ padding: '14px 20px', color: 'var(--text-muted)' }}>{exp.description}</td>
-                      <td style={{ padding: '14px 20px', color: '#94A3B8', fontFamily: 'monospace' }}>
-                        {exp.receiptRef}
-                      </td>
-                      <td style={{ padding: '14px 20px', fontWeight: 700, color: 'var(--text-main)' }}>
-                        R{exp.amount.toFixed(2)}
+                  {expenses.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} style={{ padding: '36px 20px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                        No grant disbursements recorded yet. New allocations and reimbursements will appear here.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    expenses.map((exp) => (
+                      <tr key={exp.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                        <td style={{ padding: '14px 20px', fontWeight: 600, color: 'var(--text-main)' }}>
+                          {exp.beneficiaryName}
+                        </td>
+                        <td style={{ padding: '14px 20px' }}>
+                          <StatusPill status={exp.category} size="sm" />
+                        </td>
+                        <td style={{ padding: '14px 20px', color: 'var(--text-muted)' }}>{exp.description}</td>
+                        <td style={{ padding: '14px 20px', color: '#94A3B8', fontFamily: 'monospace' }}>
+                          {exp.receiptRef}
+                        </td>
+                        <td style={{ padding: '14px 20px', fontWeight: 700, color: 'var(--text-main)' }}>
+                          R{exp.amount.toFixed(2)}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -323,62 +331,68 @@ export const AdminFinance: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {followUps.map((fol) => (
-              <div
-                key={fol.id}
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '18px',
-                  padding: '20px 24px',
-                  border: '1px solid var(--border-color)',
-                  boxShadow: 'var(--shadow-sm)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '14px',
-                }}
-              >
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <StatusPill status={fol.status} size="sm" />
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary-forest)', textTransform: 'uppercase' }}>
-                      {fol.milestone.replace('_', ' ')} Milestone
-                    </span>
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                      Scheduled: <strong>{fol.scheduledDate}</strong>
-                    </span>
-                  </div>
-                  <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)' }}>
-                    {fol.beneficiaryName}
-                  </h4>
-                  <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                    {fol.notes} • Case Officer: <strong>{fol.caseWorker}</strong>
-                  </p>
-                </div>
-
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  {fol.status !== 'completed' && (
-                    <button
-                      onClick={() => updateFollowUpStatus(fol.id, 'completed')}
-                      style={{
-                        backgroundColor: '#DCFCE7',
-                        color: '#15803D',
-                        padding: '8px 14px',
-                        borderRadius: '8px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                      }}
-                    >
-                      <Check size={13} /> Mark Completed
-                    </button>
-                  )}
-                </div>
+            {followUps.length === 0 ? (
+              <div style={{ backgroundColor: '#FFFFFF', borderRadius: '18px', padding: '36px', textAlign: 'center', color: 'var(--text-muted)', border: '1px solid var(--border-color)', fontSize: '13px' }}>
+                No transition milestones scheduled yet. Click "Schedule Milestone Check-in" above to add 30/60/90 day reviews.
               </div>
-            ))}
+            ) : (
+              followUps.map((fol) => (
+                <div
+                  key={fol.id}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '18px',
+                    padding: '20px 24px',
+                    border: '1px solid var(--border-color)',
+                    boxShadow: 'var(--shadow-sm)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '14px',
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <StatusPill status={fol.status} size="sm" />
+                      <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary-forest)', textTransform: 'uppercase' }}>
+                        {fol.milestone.replace('_', ' ')} Milestone
+                      </span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                        Scheduled: <strong>{fol.scheduledDate}</strong>
+                      </span>
+                    </div>
+                    <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)' }}>
+                      {fol.beneficiaryName}
+                    </h4>
+                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      {fol.notes} • Case Officer: <strong>{fol.caseWorker}</strong>
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {fol.status !== 'completed' && (
+                      <button
+                        onClick={() => updateFollowUpStatus(fol.id, 'completed')}
+                        style={{
+                          backgroundColor: '#DCFCE7',
+                          color: '#15803D',
+                          padding: '8px 14px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                        }}
+                      >
+                        <Check size={13} /> Mark Completed
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
@@ -386,7 +400,12 @@ export const AdminFinance: React.FC = () => {
       {/* TAB 3: BENEFICIARY REFLECTIONS & FEEDBACK */}
       {activeTab === 'feedback' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
-          {feedbacks.map((fb) => (
+          {feedbacks.length === 0 ? (
+            <div style={{ backgroundColor: '#FFFFFF', borderRadius: '18px', padding: '36px', textAlign: 'center', color: 'var(--text-muted)', border: '1px solid var(--border-color)', gridColumn: '1 / -1', fontSize: '13px' }}>
+              No guest testimonials or post-stay reflections submitted yet.
+            </div>
+          ) : (
+            feedbacks.map((fb) => (
             <div
               key={fb.id}
               style={{
@@ -432,9 +451,10 @@ export const AdminFinance: React.FC = () => {
                 {fb.beneficiaryName}
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
+    )}
 
       {/* Schedule Milestone Modal */}
       {showFollowUpModal && (

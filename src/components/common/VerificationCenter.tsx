@@ -61,6 +61,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
   const [faceScanProgress, setFaceScanProgress] = useState(0);
   const [faceVerified, setFaceVerified] = useState(false);
   const [faceMatchScore, setFaceMatchScore] = useState(0);
+  const [certificateCode, setCertificateCode] = useState<string>('');
   const [livenessCheck, setLivenessCheck] = useState({
     blinkTest: false,
     headTilt: false,
@@ -107,6 +108,9 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
             stream.getTracks().forEach((track) => track.stop());
           }
 
+          const generatedCert = `GAM-ZA-${Math.floor(100000 + Math.random() * 900000)}`;
+          setCertificateCode(generatedCert);
+
           if (onVerificationComplete) {
             onVerificationComplete({
               idType,
@@ -125,7 +129,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
               faceMatchScore: 98.8,
               faceVerified: true,
               verificationDate: new Date().toISOString(),
-              certificateRef: `GAM-ZA-${Math.floor(100000 + Math.random() * 900000)}`,
+              certificateRef: generatedCert,
             });
           }
           return 100;
@@ -938,7 +942,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
                 Cryptographic Sanctuary Clearance Issued
               </div>
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                Certificate: <strong style={{ color: 'var(--color-water-deep)' }}>GAM-ZA-984021</strong> • POPIA Encrypted • Home Affairs Validated
+                Certificate: <strong style={{ color: 'var(--color-water-deep)' }}>{certificateCode || 'GAM-ZA-VALIDATED'}</strong> • POPIA Encrypted • Home Affairs Validated
               </div>
             </div>
           </div>

@@ -71,6 +71,7 @@ interface AppContextType {
 
   // Actions
   addBeneficiary: (data: Partial<Beneficiary>) => Beneficiary;
+  updateBeneficiary: (id: string, data: Partial<Beneficiary>) => void;
   updateBeneficiaryStatus: (id: string, status: BeneficiaryStatus) => void;
   assignPropertyToBeneficiary: (
     beneficiaryId: string,
@@ -78,6 +79,24 @@ interface AppContextType {
     startDate?: string,
     endDate?: string
   ) => void;
+  createBooking: (bookingData: {
+    propertyId: string;
+    startDate: string;
+    endDate: string;
+    guestName: string;
+    guestEmail: string;
+    guestPhone?: string;
+    guestsCount?: number;
+    retreatType?: string;
+    nightlyRate?: number;
+    totalAmount?: number;
+    grantCoveredAmount?: number;
+    paidAmount?: number;
+    cleaningFee?: number;
+    serviceFee?: number;
+    paymentMethod: 'card' | 'instant_eft' | 'grant_voucher' | 'capitec_pay';
+    paymentRef: string;
+  }) => Booking;
   addProperty: (data: Partial<Property>) => Property;
   updatePropertyVerification: (
     propertyId: string,
@@ -127,10 +146,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeView, setActiveView] = useState<string>('landing');
   const [currentBeneficiaryId, setCurrentBeneficiaryId] = useState<string>('');
 
-  // Load from LocalStorage or initialize with mock data
+  // Load from LocalStorage or initialize with clean data
   const loadInitial = <T,>(key: string, fallback: T): T => {
     try {
-      const stored = localStorage.getItem(`gapamonth_v6_clean_${key}`);
+      const stored = localStorage.getItem(`gapamonth_v7_clean_${key}`);
       return stored ? JSON.parse(stored) : fallback;
     } catch {
       return fallback;
@@ -177,7 +196,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     loadInitial('messages', initialMessages)
   );
   const [favorites, setFavorites] = useState<string[]>(() =>
-    loadInitial('favorites', ['prop-001', 'prop-004'])
+    loadInitial('favorites', [])
   );
 
   const toggleFavorite = (propertyId: string) => {
@@ -189,20 +208,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Sync state to local storage
   useEffect(() => {
     try {
-      localStorage.setItem('gapamonth_v6_clean_beneficiaries', JSON.stringify(beneficiaries));
-      localStorage.setItem('gapamonth_v6_clean_properties', JSON.stringify(properties));
-      localStorage.setItem('gapamonth_v6_clean_bookings', JSON.stringify(bookings));
-      localStorage.setItem('gapamonth_v6_clean_serviceProviders', JSON.stringify(serviceProviders));
-      localStorage.setItem('gapamonth_v6_clean_serviceRequests', JSON.stringify(serviceRequests));
-      localStorage.setItem('gapamonth_v6_clean_checkins', JSON.stringify(checkins));
-      localStorage.setItem('gapamonth_v6_clean_comfortRequests', JSON.stringify(comfortRequests));
-      localStorage.setItem('gapamonth_v6_clean_safetyAlerts', JSON.stringify(safetyAlerts));
-      localStorage.setItem('gapamonth_v6_clean_propertyIssues', JSON.stringify(propertyIssues));
-      localStorage.setItem('gapamonth_v6_clean_expenses', JSON.stringify(expenses));
-      localStorage.setItem('gapamonth_v6_clean_feedbacks', JSON.stringify(feedbacks));
-      localStorage.setItem('gapamonth_v6_clean_followUps', JSON.stringify(followUps));
-      localStorage.setItem('gapamonth_v6_clean_messages', JSON.stringify(messages));
-      localStorage.setItem('gapamonth_v6_clean_favorites', JSON.stringify(favorites));
+      localStorage.setItem('gapamonth_v7_clean_beneficiaries', JSON.stringify(beneficiaries));
+      localStorage.setItem('gapamonth_v7_clean_properties', JSON.stringify(properties));
+      localStorage.setItem('gapamonth_v7_clean_bookings', JSON.stringify(bookings));
+      localStorage.setItem('gapamonth_v7_clean_serviceProviders', JSON.stringify(serviceProviders));
+      localStorage.setItem('gapamonth_v7_clean_serviceRequests', JSON.stringify(serviceRequests));
+      localStorage.setItem('gapamonth_v7_clean_checkins', JSON.stringify(checkins));
+      localStorage.setItem('gapamonth_v7_clean_comfortRequests', JSON.stringify(comfortRequests));
+      localStorage.setItem('gapamonth_v7_clean_safetyAlerts', JSON.stringify(safetyAlerts));
+      localStorage.setItem('gapamonth_v7_clean_propertyIssues', JSON.stringify(propertyIssues));
+      localStorage.setItem('gapamonth_v7_clean_expenses', JSON.stringify(expenses));
+      localStorage.setItem('gapamonth_v7_clean_feedbacks', JSON.stringify(feedbacks));
+      localStorage.setItem('gapamonth_v7_clean_followUps', JSON.stringify(followUps));
+      localStorage.setItem('gapamonth_v7_clean_messages', JSON.stringify(messages));
+      localStorage.setItem('gapamonth_v7_clean_favorites', JSON.stringify(favorites));
     } catch {
       // storage quota or incognito fallback
     }
@@ -294,6 +313,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return newBen;
   };
 
+  const updateBeneficiary = (id: string, data: Partial<Beneficiary>) => {
+    setBeneficiaries((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, ...data } : b))
+    );
+  };
+
   const updateBeneficiaryStatus = (id: string, status: BeneficiaryStatus) => {
     setBeneficiaries((prev) =>
       prev.map((b) => (b.id === id ? { ...b, status } : b))
@@ -347,6 +372,90 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         p.id === propertyId ? { ...p, currentBeneficiaryId: beneficiaryId } : p
       )
     );
+  };
+
+  const createBooking = (bookingData: {
+    propertyId: string;
+    startDate: string;
+    endDate: string;
+    guestName: string;
+    guestEmail: string;
+    guestPhone?: string;
+    guestsCount?: number;
+    retreatType?: string;
+    nightlyRate?: number;
+    totalAmount?: number;
+    grantCoveredAmount?: number;
+    paidAmount?: number;
+    cleaningFee?: number;
+    serviceFee?: number;
+    paymentMethod: 'card' | 'instant_eft' | 'grant_voucher' | 'capitec_pay';
+    paymentRef: string;
+  }): Booking => {
+    const prop = properties.find((p) => p.id === bookingData.propertyId);
+    let beneficiary = beneficiaries.find(
+      (b) => b.email.toLowerCase() === bookingData.guestEmail.toLowerCase()
+    );
+
+    if (!beneficiary) {
+      beneficiary = addBeneficiary({
+        name: bookingData.guestName,
+        email: bookingData.guestEmail,
+        phone: bookingData.guestPhone || '',
+        status: 'booking_confirmed',
+        assignedPropertyId: bookingData.propertyId,
+        assignedPropertyName: prop?.title || 'Sanctuary Haven',
+        stayStartDate: bookingData.startDate,
+        stayEndDate: bookingData.endDate,
+      });
+    } else {
+      updateBeneficiaryStatus(beneficiary.id, 'booking_confirmed');
+    }
+
+    const newBookingId = `BK-ZA-${Math.floor(100000 + Math.random() * 900000)}`;
+    const newBooking: Booking = {
+      id: newBookingId,
+      beneficiaryId: beneficiary.id,
+      beneficiaryName: bookingData.guestName,
+      beneficiaryEmail: bookingData.guestEmail,
+      beneficiaryPhone: bookingData.guestPhone,
+      propertyId: bookingData.propertyId,
+      propertyTitle: prop?.title || 'Sanctuary Haven',
+      propertyAddress: prop?.address,
+      propertyCity: prop?.city,
+      propertyPhoto: prop?.photos?.[0] || 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=80',
+      startDate: bookingData.startDate,
+      endDate: bookingData.endDate,
+      status: 'confirmed',
+      totalNights: 30,
+      nightlyRate: bookingData.nightlyRate || prop?.nightlyPrice || 1850,
+      totalAmount: bookingData.totalAmount || 55500,
+      grantCoveredAmount: bookingData.grantCoveredAmount || 0,
+      paidAmount: bookingData.paidAmount || 0,
+      cleaningFee: bookingData.cleaningFee || prop?.cleaningFee || 850,
+      serviceFee: bookingData.serviceFee || 0,
+      paymentMethod: bookingData.paymentMethod,
+      paymentStatus: bookingData.paidAmount && bookingData.paidAmount > 0 ? 'paid' : 'grant_sponsored',
+      paymentRef: bookingData.paymentRef,
+      guestsCount: bookingData.guestsCount || 1,
+      keycode: `${Math.floor(1000 + Math.random() * 9000)}#`,
+      checkInInstructions: `Arrival anytime after 14:00. Use digital keypad at main entrance. Clean towels & Egyptian cotton linen provided.`,
+      retreatType: bookingData.retreatType || 'Restorative Sanctuary Stay',
+      createdAt: new Date().toISOString(),
+    };
+
+    setBookings((prev) => [newBooking, ...prev]);
+    setCurrentBeneficiaryId(beneficiary.id);
+
+    setProperties((prev) =>
+      prev.map((p) =>
+        p.id === bookingData.propertyId
+          ? { ...p, currentBeneficiaryId: beneficiary!.id }
+          : p
+      )
+    );
+
+    return newBooking;
   };
 
   const addProperty = (data: Partial<Property>): Property => {
@@ -698,7 +807,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setFeedbacks(initialFeedbacks);
     setFollowUps(initialFollowUps);
     setMessages(initialMessages);
-    setFavorites(['prop-001', 'prop-004']);
+    setFavorites([]);
   };
 
   return (
@@ -733,8 +842,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         currentBeneficiaryBooking,
         currentBeneficiaryProperty,
         addBeneficiary,
+        updateBeneficiary,
         updateBeneficiaryStatus,
         assignPropertyToBeneficiary,
+        createBooking,
         addProperty,
         updatePropertyVerification,
         addServiceRequest,

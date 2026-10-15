@@ -207,13 +207,34 @@ export interface Booking {
   id: string;
   beneficiaryId: string;
   beneficiaryName: string;
+  beneficiaryEmail?: string;
+  beneficiaryPhone?: string;
   propertyId: string;
   propertyTitle: string;
+  propertyAddress?: string;
+  propertyCity?: string;
+  propertyPhoto?: string;
   startDate: string;
   endDate: string;
   status: BookingStatus;
   notes?: string;
   createdAt: string;
+
+  // Vacation Booking & Payment Details
+  totalNights?: number;
+  nightlyRate?: number;
+  totalAmount?: number;
+  grantCoveredAmount?: number;
+  cleaningFee?: number;
+  serviceFee?: number;
+  paidAmount?: number;
+  paymentMethod?: 'card' | 'instant_eft' | 'grant_voucher' | 'capitec_pay';
+  paymentStatus?: 'paid' | 'grant_sponsored' | 'pending';
+  paymentRef?: string;
+  guestsCount?: number;
+  keycode?: string;
+  checkInInstructions?: string;
+  retreatType?: string;
 }
 
 export interface ServiceProvider {

@@ -37,6 +37,8 @@ import {
   Compass,
 } from 'lucide-react';
 
+import { BookingCheckoutModal } from './BookingCheckoutModal';
+
 interface FilterState {
   minPrice: number;
   maxPrice: number;
@@ -72,6 +74,7 @@ export const SanctuariesPage: React.FC = () => {
 
   // Active Property Modal State
   const [activePropertyModal, setActivePropertyModal] = useState<Property | null>(null);
+  const [bookingProperty, setBookingProperty] = useState<Property | null>(null);
 
   // Card Photo Slideshow Indices map (propertyId -> photoIndex)
   const [cardPhotoIndices, setCardPhotoIndices] = useState<Record<string, number>>({});
@@ -1828,11 +1831,7 @@ export const SanctuariesPage: React.FC = () => {
                     {/* Reserve CTA */}
                     <button
                       onClick={() => {
-                        setReservationNotice(true);
-                        setTimeout(() => {
-                          setActivePropertyModal(null);
-                          setActiveView('intake-wizard');
-                        }, 1200);
+                        setBookingProperty(activePropertyModal);
                       }}
                       style={{
                         width: '100%',
@@ -1848,7 +1847,7 @@ export const SanctuariesPage: React.FC = () => {
                         marginBottom: '12px',
                       }}
                     >
-                      {reservationNotice ? 'Securing 30-Day Sanctuary...' : 'Reserve Sanctuary Stay'}
+                      Reserve & Apply Vacation Details
                     </button>
 
                     <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '18px' }}>
@@ -2023,6 +2022,17 @@ export const SanctuariesPage: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 7. VACATION BOOKING & PAYMENT CHECKOUT MODAL */}
+      {bookingProperty && (
+        <BookingCheckoutModal
+          property={bookingProperty}
+          initialCheckIn={modalCheckIn}
+          initialCheckOut={modalCheckOut}
+          initialGuests={modalGuests}
+          onClose={() => setBookingProperty(null)}
+        />
       )}
     </div>
   );

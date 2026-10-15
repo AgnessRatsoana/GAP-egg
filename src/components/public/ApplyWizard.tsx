@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   Shield,
@@ -13,12 +13,28 @@ import {
   Scale,
   UserCheck,
   Check,
+  User,
+  Mail,
+  Key,
+  AlertCircle,
+  LogOut,
 } from 'lucide-react';
 import { VerificationCenter } from '../common/VerificationCenter';
 import { SanctuaryPoliciesModal } from '../common/SanctuaryPoliciesModal';
 
 export const ApplyWizard: React.FC = () => {
-  const { addBeneficiary, setRole, setCurrentBeneficiaryId, setActiveView } = useApp();
+  const {
+    addBeneficiary,
+    updateBeneficiary,
+    setRole,
+    setCurrentBeneficiaryId,
+    setActiveView,
+    currentBeneficiary,
+    role,
+    beneficiaries,
+  } = useApp();
+
+  const isAuthenticated = role === 'beneficiary' && !!currentBeneficiary;
 
   const [step, setStep] = useState<number>(1);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
@@ -26,14 +42,24 @@ export const ApplyWizard: React.FC = () => {
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
   const [policyInitialTab, setPolicyInitialTab] = useState<'terms' | 'rules' | 'indemnity' | 'verification'>('terms');
 
+  // Authentication Gate State (when not yet logged in)
+  const [authMode, setAuthMode] = useState<'register' | 'signin'>('register');
+  const [authName, setAuthName] = useState('');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authPhone, setAuthPhone] = useState('');
+  const [authProvince, setAuthProvince] = useState('Western Cape');
+  const [authConsent, setAuthConsent] = useState(false);
+  const [authError, setAuthError] = useState('');
+
   // Form State
   const [formData, setFormData] = useState({
     // Step 1: Personal Info
-    name: '',
-    email: '',
-    phone: '',
+    name: currentBeneficiary?.name || '',
+    email: currentBeneficiary?.email || '',
+    phone: currentBeneficiary?.phone || '',
     province: 'Western Cape',
-    city: '',
+    city: currentBeneficiary?.city || '',
     dateOfBirth: '',
     emergencyName: '',
     emergencyRelationship: '',
@@ -62,6 +88,18 @@ export const ApplyWizard: React.FC = () => {
     digitalSignature: '',
   });
 
+  // Keep form data synchronized if an account logs in or changes
+  useEffect(() => {
+    if (currentBeneficiary) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || currentBeneficiary.name || '',
+        email: prev.email || currentBeneficiary.email || '',
+        phone: prev.phone || currentBeneficiary.phone || '',
+      }));
+    }
+  }, [currentBeneficiary]);
+
   const updateField = (field: string, val: any) => {
     setFormData((prev) => ({ ...prev, [field]: val }));
   };
@@ -76,6 +114,87 @@ export const ApplyWizard: React.FC = () => {
           : [...prev.supportNeeded, item],
       };
     });
+  };
+
+  const handleAuthRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authName.trim()) {
+      setAuthError('Please enter your full legal name.');
+      return;
+    }
+    if (!authEmail.trim() || !authEmail.includes('@')) {
+      setAuthError('Please enter a valid confidential email address.');
+      return;
+    }
+    if (!authPassword || authPassword.length < 6) {
+      setAuthError('Please enter a secure password (at least 6 characters).');
+      return;
+    }
+    if (!authConsent) {
+      setAuthError('Please confirm consent for POPIA personal information safeguarding.');
+      return;
+    }
+
+    const created = addBeneficiary({
+      name: authName.trim(),
+      email: authEmail.trim(),
+      phone: authPhone.trim(),
+      city: `${authProvince}, South Africa`,
+    });
+    setCurrentBeneficiaryId(created.id);
+    setRole('beneficiary');
+    setFormData((prev) => ({
+      ...prev,
+      name: authName.trim(),
+      email: authEmail.trim(),
+      phone: authPhone.trim(),
+      province: authProvince,
+    }));
+    setAuthError('');
+  };
+
+  const handleAuthSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authEmail.trim()) {
+      setAuthError('Please enter your registered email address.');
+      return;
+    }
+    if (!authPassword) {
+      setAuthError('Please enter your account password.');
+      return;
+    }
+
+    const found = beneficiaries.find(
+      (b) => b.email.toLowerCase() === authEmail.trim().toLowerCase()
+    );
+
+    let id = '';
+    if (found) {
+      id = found.id;
+      setFormData((prev) => ({
+        ...prev,
+        name: found.name || prev.name,
+        email: found.email || prev.email,
+        phone: found.phone || prev.phone,
+      }));
+    } else {
+      const namePart = authEmail.split('@')[0];
+      const created = addBeneficiary({
+        name: namePart.charAt(0).toUpperCase() + namePart.slice(1),
+        email: authEmail.trim(),
+        phone: authPhone.trim(),
+      });
+      id = created.id;
+      setFormData((prev) => ({
+        ...prev,
+        name: created.name,
+        email: created.email,
+      }));
+    }
+
+    setCurrentBeneficiaryId(id);
+    setRole('beneficiary');
+    setAuthError('');
   };
 
   const handleNext = () => {
@@ -100,33 +219,60 @@ export const ApplyWizard: React.FC = () => {
       return;
     }
 
-    const created = addBeneficiary({
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      city: formData.city || 'South Africa',
-      dateOfBirth: formData.dateOfBirth || '1992-05-10',
-      emergencyContact: {
-        name: formData.emergencyName || 'Trusted Friend',
-        relationship: formData.emergencyRelationship || 'Contact',
-        phone: formData.emergencyPhone || formData.phone,
-      },
-      circumstances: formData.circumstances,
-      narrative: formData.narrative,
-      urgencyLevel: formData.urgencyLevel,
-      supportNeeded: formData.supportNeeded,
-      accommodationPreferences: {
-        preferredLocation: formData.preferredLocation || 'Quiet rural sanctuary',
-        accessibilityNeeds: formData.accessibilityNeeds || 'None',
-        petConsiderations: formData.petConsiderations || 'None',
-        moveInDate: formData.moveInDate,
-      },
-      status: 'submitted',
-    });
+    const refCode = `APP-ZA-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    const refCode = `MGM-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    if (currentBeneficiary) {
+      updateBeneficiary(currentBeneficiary.id, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        city: formData.city || 'South Africa',
+        dateOfBirth: formData.dateOfBirth || '1992-05-10',
+        emergencyContact: {
+          name: formData.emergencyName || 'Trusted Friend',
+          relationship: formData.emergencyRelationship || 'Contact',
+          phone: formData.emergencyPhone || formData.phone,
+        },
+        circumstances: formData.circumstances,
+        narrative: formData.narrative,
+        urgencyLevel: formData.urgencyLevel,
+        supportNeeded: formData.supportNeeded,
+        accommodationPreferences: {
+          preferredLocation: formData.preferredLocation || 'Quiet rural sanctuary',
+          accessibilityNeeds: formData.accessibilityNeeds || 'None',
+          petConsiderations: formData.petConsiderations || 'None',
+          moveInDate: formData.moveInDate,
+        },
+        status: 'submitted',
+      });
+    } else {
+      const created = addBeneficiary({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        city: formData.city || 'South Africa',
+        dateOfBirth: formData.dateOfBirth || '1992-05-10',
+        emergencyContact: {
+          name: formData.emergencyName || 'Trusted Friend',
+          relationship: formData.emergencyRelationship || 'Contact',
+          phone: formData.emergencyPhone || formData.phone,
+        },
+        circumstances: formData.circumstances,
+        narrative: formData.narrative,
+        urgencyLevel: formData.urgencyLevel,
+        supportNeeded: formData.supportNeeded,
+        accommodationPreferences: {
+          preferredLocation: formData.preferredLocation || 'Quiet rural sanctuary',
+          accessibilityNeeds: formData.accessibilityNeeds || 'None',
+          petConsiderations: formData.petConsiderations || 'None',
+          moveInDate: formData.moveInDate,
+        },
+        status: 'submitted',
+      });
+      setCurrentBeneficiaryId(created.id);
+    }
+
     setSubmittedRef(refCode);
-    setCurrentBeneficiaryId(created.id);
   };
 
   if (submittedRef) {
@@ -239,7 +385,22 @@ export const ApplyWizard: React.FC = () => {
               }}
               className="card-hover"
             >
-              Enter Beneficiary Portal <ArrowRight size={16} />
+              Enter Sanctuary Portal <ArrowRight size={16} />
+            </button>
+            <button
+              onClick={() => setActiveView('sanctuaries')}
+              style={{
+                backgroundColor: 'var(--color-water)',
+                color: '#FFFFFF',
+                padding: '13px 24px',
+                borderRadius: '12px',
+                fontWeight: 600,
+                fontSize: '14px',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              Browse Sanctuaries & Reserve Stay
             </button>
             <button
               onClick={() => setActiveView('landing')}
@@ -261,8 +422,435 @@ export const ApplyWizard: React.FC = () => {
     );
   }
 
+  // 1. MANDATORY AUTHENTICATION GATE: User must register & log in before applying
+  if (!isAuthenticated) {
+    return (
+      <div className="animate-fade-in" style={{ padding: '52px 24px 80px', maxWidth: '720px', margin: '0 auto' }}>
+        {/* Top Safeguarding Badge */}
+        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 16px',
+              borderRadius: '24px',
+              backgroundColor: 'var(--primary-forest-light)',
+              color: 'var(--primary-forest)',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              marginBottom: '16px',
+            }}
+          >
+            <Lock size={13} />
+            <span>Registration & Login Required</span>
+          </div>
+
+          <h1
+            className="font-serif"
+            style={{
+              fontSize: '34px',
+              fontWeight: 500,
+              color: 'var(--text-heading)',
+              marginBottom: '12px',
+              lineHeight: 1.25,
+            }}
+          >
+            Register or Sign In to Apply for Sanctuary
+          </h1>
+          <p
+            style={{
+              fontSize: '14.5px',
+              color: 'var(--text-muted)',
+              lineHeight: 1.6,
+              maxWidth: '620px',
+              margin: '0 auto',
+            }}
+          >
+            In accordance with the South African Protection of Personal Information Act (POPIA Act 4 of 2013) and our clinical care safeguarding protocols, all applicants must register or log in before submitting an application. This ensures your sensitive health narrative, ID verification, and 30-day sanctuary grant are securely assigned to you.
+          </p>
+        </div>
+
+        {/* Tab Switcher & Auth Card */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '20px',
+            boxShadow: '0 12px 36px rgba(0,0,0,0.08)',
+            border: '1px solid var(--border-color)',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Mode Switcher Tabs */}
+          <div
+            style={{
+              display: 'flex',
+              borderBottom: '1px solid var(--border-color)',
+              backgroundColor: 'var(--bg-warm)',
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMode('register');
+                setAuthError('');
+              }}
+              style={{
+                flex: 1,
+                padding: '16px',
+                border: 'none',
+                background: authMode === 'register' ? '#FFFFFF' : 'transparent',
+                fontWeight: authMode === 'register' ? 700 : 500,
+                color: authMode === 'register' ? 'var(--primary-forest)' : 'var(--text-muted)',
+                borderBottom: authMode === 'register' ? '2px solid var(--primary-forest)' : 'none',
+                cursor: 'pointer',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <Sparkles size={16} />
+              <span>Create Sanctuary Account (Register)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMode('signin');
+                setAuthError('');
+              }}
+              style={{
+                flex: 1,
+                padding: '16px',
+                border: 'none',
+                background: authMode === 'signin' ? '#FFFFFF' : 'transparent',
+                fontWeight: authMode === 'signin' ? 700 : 500,
+                color: authMode === 'signin' ? 'var(--primary-forest)' : 'var(--text-muted)',
+                borderBottom: authMode === 'signin' ? '2px solid var(--primary-forest)' : 'none',
+                cursor: 'pointer',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <User size={16} />
+              <span>Sign In to Existing Account</span>
+            </button>
+          </div>
+
+          <div style={{ padding: '32px 32px 36px' }}>
+            {authError && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backgroundColor: '#FEF2F2',
+                  border: '1px solid #FECACA',
+                  color: '#991B1B',
+                  padding: '12px 16px',
+                  borderRadius: '10px',
+                  fontSize: '13px',
+                  marginBottom: '20px',
+                }}
+              >
+                <AlertCircle size={16} />
+                <span>{authError}</span>
+              </div>
+            )}
+
+            {authMode === 'register' ? (
+              <form onSubmit={handleAuthRegister} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '6px' }}>
+                    Full Legal Name
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <User size={16} style={{ position: 'absolute', left: '12px', top: '14px', color: 'var(--text-subtle)' }} />
+                    <input
+                      type="text"
+                      placeholder="e.g. Sindiwe Khumalo"
+                      value={authName}
+                      onChange={(e) => setAuthName(e.target.value)}
+                      style={{ paddingLeft: '38px', backgroundColor: '#FFFFFF' }}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '6px' }}>
+                    Confidential Email Address
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Mail size={16} style={{ position: 'absolute', left: '12px', top: '14px', color: 'var(--text-subtle)' }} />
+                    <input
+                      type="email"
+                      placeholder="e.g. sindiwe@example.co.za"
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      style={{ paddingLeft: '38px', backgroundColor: '#FFFFFF' }}
+                      required
+                    />
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                    We only use this address for strictly confidential intake correspondence.
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '6px' }}>
+                      South African Mobile Number
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="e.g. +27 82 123 4567"
+                      value={authPhone}
+                      onChange={(e) => setAuthPhone(e.target.value)}
+                      style={{ backgroundColor: '#FFFFFF' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '6px' }}>
+                      Province
+                    </label>
+                    <select
+                      value={authProvince}
+                      onChange={(e) => setAuthProvince(e.target.value)}
+                      style={{ backgroundColor: '#FFFFFF' }}
+                    >
+                      <option value="Western Cape">Western Cape</option>
+                      <option value="Gauteng">Gauteng</option>
+                      <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                      <option value="Eastern Cape">Eastern Cape</option>
+                      <option value="Mpumalanga">Mpumalanga</option>
+                      <option value="Free State">Free State</option>
+                      <option value="Limpopo">Limpopo</option>
+                      <option value="North West">North West</option>
+                      <option value="Northern Cape">Northern Cape</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '6px' }}>
+                    Create Secure Password
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Key size={16} style={{ position: 'absolute', left: '12px', top: '14px', color: 'var(--text-subtle)' }} />
+                    <input
+                      type="password"
+                      placeholder="Minimum 6 characters"
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      style={{ paddingLeft: '38px', backgroundColor: '#FFFFFF' }}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '6px' }}>
+                  <input
+                    type="checkbox"
+                    id="authConsentCheck"
+                    checked={authConsent}
+                    onChange={(e) => setAuthConsent(e.target.checked)}
+                    style={{ marginTop: '3px', cursor: 'pointer' }}
+                    required
+                  />
+                  <label htmlFor="authConsentCheck" style={{ fontSize: '12px', color: 'var(--text-body)', lineHeight: 1.5, cursor: 'pointer' }}>
+                    I consent to the confidential processing of my sabbatical and respite application under the South African Protection of Personal Information Act (POPIA).
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn-green-solid"
+                  style={{
+                    padding: '14px',
+                    borderRadius: '12px',
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    width: '100%',
+                    justifyContent: 'center',
+                    marginTop: '8px',
+                    boxShadow: '0 4px 14px rgba(61, 111, 86, 0.25)',
+                  }}
+                >
+                  <span>Create Account & Unlock Application</span>
+                  <ArrowRight size={16} />
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleAuthSignIn} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '6px' }}>
+                    Registered Email Address
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Mail size={16} style={{ position: 'absolute', left: '12px', top: '14px', color: 'var(--text-subtle)' }} />
+                    <input
+                      type="email"
+                      placeholder="e.g. sindiwe@example.co.za"
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      style={{ paddingLeft: '38px', backgroundColor: '#FFFFFF' }}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '6px' }}>
+                    Account Password
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Key size={16} style={{ position: 'absolute', left: '12px', top: '14px', color: 'var(--text-subtle)' }} />
+                    <input
+                      type="password"
+                      placeholder="Enter your password"
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      style={{ paddingLeft: '38px', backgroundColor: '#FFFFFF' }}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn-green-solid"
+                  style={{
+                    padding: '14px',
+                    borderRadius: '12px',
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    width: '100%',
+                    justifyContent: 'center',
+                    marginTop: '8px',
+                    boxShadow: '0 4px 14px rgba(61, 111, 86, 0.25)',
+                  }}
+                >
+                  <span>Sign In & Open Application</span>
+                  <ArrowRight size={16} />
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+
+        {/* 3 Pillars of Trust */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '16px',
+            marginTop: '32px',
+          }}
+        >
+          <div style={{ backgroundColor: '#FFFFFF', padding: '18px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+            <div style={{ color: 'var(--primary-forest)', flexShrink: 0, marginTop: '2px' }}><Shield size={18} /></div>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '3px' }}>POPIA Protected</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.4 }}>Strict hospital-grade encryption for all confidential disclosures.</div>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: '#FFFFFF', padding: '18px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+            <div style={{ color: 'var(--primary-forest)', flexShrink: 0, marginTop: '2px' }}><Heart size={18} /></div>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '3px' }}>Clinical Safeguards</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.4 }}>Trauma-informed review by licensed healthcare professionals.</div>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: '#FFFFFF', padding: '18px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+            <div style={{ color: 'var(--primary-forest)', flexShrink: 0, marginTop: '2px' }}><Lock size={18} /></div>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '3px' }}>Live Case Tracking</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.4 }}>Direct encrypted care chat and placement verification portal.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="animate-fade-in" style={{ padding: '52px 24px 80px', maxWidth: '820px', margin: '0 auto' }}>
+      {/* Active Authenticated Account Verification Banner */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: '#F2F8F5',
+          border: '1px solid var(--color-green-border)',
+          borderRadius: '12px',
+          padding: '12px 18px',
+          marginBottom: '28px',
+          flexWrap: 'wrap',
+          gap: '10px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div
+            style={{
+              width: '28px',
+              height: '28px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--color-green)',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 700,
+              fontSize: '12px',
+            }}
+          >
+            <Check size={16} />
+          </div>
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-green)' }}>
+              Authenticated Applicant: {currentBeneficiary?.name}
+            </div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              Account: {currentBeneficiary?.email} · POPIA Encrypted Application Session
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            setRole('public');
+            setCurrentBeneficiaryId('');
+          }}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-muted)',
+            fontSize: '12px',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+          title="Sign out or switch to another beneficiary account"
+        >
+          <LogOut size={13} />
+          <span>Switch Account</span>
+        </button>
+      </div>
+
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '36px' }}>
         <div

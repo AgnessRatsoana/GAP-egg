@@ -29,8 +29,18 @@ const AppContent: React.FC = () => {
           </>
         )}
 
-        {/* Beneficiary Portal */}
-        {role === 'beneficiary' && <BeneficiaryPortal />}
+        {/* Beneficiary Views & Sanctuary Portal */}
+        {role === 'beneficiary' && (
+          <>
+            {activeView === 'landing' && <LandingPage />}
+            {activeView === 'how-it-works' && <HowItWorksPage />}
+            {activeView === 'sanctuaries' && <SanctuariesPage />}
+            {activeView === 'apply' && <ApplyWizard />}
+            {activeView === 'offer-home' && <OfferHome />}
+            {(!['landing', 'how-it-works', 'sanctuaries', 'apply', 'offer-home'].includes(activeView) ||
+              activeView.startsWith('portal-')) && <BeneficiaryPortal />}
+          </>
+        )}
 
         {/* Admin Console */}
         {role === 'admin' && <AdminConsole />}
