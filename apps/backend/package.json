@@ -1,0 +1,37 @@
+{
+  "name": "@gap-month/backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "lint": "oxlint src",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@gap-month/shared-types": "file:../../packages/shared-types",
+    "@gap-month/validation": "file:../../packages/validation",
+    "@prisma/client": "^6.16.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "pino-http": "^10.5.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "prisma": "^6.16.2",
+    "tsx": "^4.20.5",
+    "typescript": "~6.0.2",
+    "vitest": "^3.2.4"
+  }
+}

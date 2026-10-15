@@ -3,24 +3,24 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "dev:web": "npm run dev --workspace=@gap-month/web",
+    "dev:backend": "npm run dev --workspace=@gap-month/backend",
+    "dev:mobile": "npm run dev --workspace=@gap-month/mobile"
   },
   "dependencies": {
-    "lucide-react": "^1.56.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "turbo": "^2.5.8"
   },
   "devDependencies": {
-    "@types/node": "^24.13.3",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "oxlint": "^1.81.0",
-    "typescript": "~6.0.2",
-    "vite": "^8.3.0"
+    "typescript": "~6.0.2"
   }
 }

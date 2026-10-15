@@ -1,0 +1,1 @@
+{"root":["./src/app.test.ts","./src/app.ts","./src/config.ts","./src/server.ts","./src/middleware/auth.ts","./src/middleware/errorhandler.ts","./src/routes/health.ts","./src/routes/index.ts"],"version":"6.0.3"}

@@ -1,32 +1,44 @@
-# React + TypeScript + Vite
+# Gap Month
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Gap Month is the MENTEC Foundation sanctuary platform. The repository is an npm
+workspace monorepo managed with Turborepo:
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```text
+apps/
+  web/       Existing React + Vite website and beneficiary/admin portal
+  mobile/    Expo + React Native + Expo Router foundation
+  backend/   Versioned Express + TypeScript API and Prisma schema
+packages/
+  shared-types/  Platform-neutral domain and API types
+  validation/   Runtime-safe Zod input schemas
+  api-client/   Small typed client for web and mobile
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Getting started
+
+```bash
+npm install
+npm run dev:web
+npm run dev:backend
+npm run dev:mobile
+```
+
+The backend uses SQLite locally (`file:./dev.db`) and can be configured through
+`apps/backend/.env`. Copy `.env.example` when you need to set CORS, port, or a
+different Prisma-compatible database. Never commit credentials or environment
+files.
+
+Useful checks:
+
+```bash
+npm run build
+npm run typecheck
+npm run lint
+npm test
+```
+
+The website migration preserves the existing pages, components, context, mock
+data, CSS, and user flows under `apps/web`. The mobile and backend foundations
+are intentionally explicit about what is not implemented yet: authentication,
+identity verification, facial recognition, messaging persistence, and database
+business workflows are planned, not simulated.
