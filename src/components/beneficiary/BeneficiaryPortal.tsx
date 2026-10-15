@@ -6,6 +6,7 @@ import { ComfortRequestsView } from './ComfortRequestsView';
 import { WellbeingCheckinView } from './WellbeingCheckinView';
 import { GetToKnowMeView } from './GetToKnowMeView';
 import { BeneficiaryMessagesView } from './BeneficiaryMessagesView';
+import { BeneficiarySecurityView } from './BeneficiarySecurityView';
 import {
   Home,
   Heart,
@@ -14,6 +15,7 @@ import {
   Sparkles,
   MessageSquare,
   ChevronDown,
+  Shield,
 } from 'lucide-react';
 
 export const BeneficiaryPortal: React.FC = () => {
@@ -27,6 +29,7 @@ export const BeneficiaryPortal: React.FC = () => {
 
   const navTabs = [
     { id: 'portal-dashboard', label: 'My Sanctuary Home', icon: <Home size={17} /> },
+    { id: 'portal-security', label: 'Identity & Security', icon: <Shield size={17} /> },
     { id: 'portal-checkin', label: 'Daily Reflections', icon: <Smile size={17} /> },
     { id: 'portal-comfort', label: 'Comfort & Pantry', icon: <Coffee size={17} /> },
     { id: 'portal-support', label: 'Support Sessions', icon: <Heart size={17} /> },
