@@ -73,6 +73,11 @@ interface AppContextType {
   addBeneficiary: (data: Partial<Beneficiary>) => Beneficiary;
   updateBeneficiary: (id: string, data: Partial<Beneficiary>) => void;
   updateBeneficiaryStatus: (id: string, status: BeneficiaryStatus) => void;
+  updateBeneficiaryVerification: (beneficiaryId: string, data: VerificationData) => void;
+  toggleBeneficiaryKeypad: (beneficiaryId: string) => void;
+  toggleTwoFactor: (beneficiaryId: string) => void;
+  exportBeneficiaryData: (beneficiaryId: string) => void;
+  requestDataErasure: (beneficiaryId: string) => void;
   assignPropertyToBeneficiary: (
     beneficiaryId: string,
     propertyId: string,
