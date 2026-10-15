@@ -382,10 +382,34 @@ export const ApplyWizard: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
+                border: 'none',
+                cursor: 'pointer',
               }}
               className="card-hover"
             >
               Enter Sanctuary Portal <ArrowRight size={16} />
+            </button>
+            <button
+              onClick={() => {
+                setRole('beneficiary');
+                setActiveView('portal-security');
+              }}
+              style={{
+                backgroundColor: 'var(--color-water)',
+                color: '#FFFFFF',
+                padding: '13px 24px',
+                borderRadius: '12px',
+                fontWeight: 600,
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+              className="card-hover"
+            >
+              <Shield size={16} /> Complete ID & Biometrics Verification
             </button>
             <button
               onClick={() => setActiveView('sanctuaries')}

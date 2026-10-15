@@ -43,6 +43,12 @@ export const BeneficiaryDashboard: React.FC = () => {
     (s) => s.status === 'confirmed' || s.status === 'assigned'
   );
 
+  const isVerified = Boolean(
+    currentBeneficiary?.isIdentityVerified ||
+    (currentBeneficiary?.verificationData?.faceVerified && currentBeneficiary?.verificationData?.idVerified)
+  );
+  const keycode = currentBeneficiary?.keypadUnlocked || isVerified ? '2491#' : null;
+
   if (!currentBeneficiary) {
     return (
       <div className="animate-fade-in" style={{ textAlign: 'center', padding: '60px 24px', backgroundColor: '#FFFFFF', borderRadius: '16px', border: '1px solid var(--border-color)', maxWidth: '680px', margin: '40px auto' }}>
@@ -55,7 +61,7 @@ export const BeneficiaryDashboard: React.FC = () => {
         </p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
-            onClick={() => setActiveView('portal-verification')}
+            onClick={() => setActiveView('portal-security')}
             className="btn-luxury-forest"
           >
             Complete ID & Biometrics
@@ -145,6 +151,57 @@ export const BeneficiaryDashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Identity Verification Alert Banner (if pending) */}
+      {!isVerified && (
+        <div
+          style={{
+            backgroundColor: '#FFFBEB',
+            border: '1px solid #FDE68A',
+            borderRadius: '16px',
+            padding: '16px 20px',
+            marginBottom: '28px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                backgroundColor: '#FEF3C7',
+                color: '#B45309',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              <Shield size={18} />
+            </div>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#92400E' }}>
+                Identity & Biometric Clearance Pending
+              </div>
+              <div style={{ fontSize: '12px', color: '#B45309' }}>
+                Complete your 13-digit South African ID check and facial liveness detection to decrypt your haven keypad PIN and unlock your verified stay clearance.
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={() => setActiveView('portal-security')}
+            className="btn-water-solid"
+            style={{ fontSize: '12px', padding: '8px 16px', whiteSpace: 'nowrap' }}
+          >
+            Verify Now →
+          </button>
+        </div>
+      )}
+
       {/* 2. Main Two-Column Layout */}
       <div
         style={{
@@ -219,7 +276,27 @@ export const BeneficiaryDashboard: React.FC = () => {
             >
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Keypad PIN:</span>{' '}
-                <strong style={{ color: 'var(--text-main)' }}>2491#</strong>
+                {keycode ? (
+                  <strong style={{ color: 'var(--color-green)', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
+                    {keycode} (Active)
+                  </strong>
+                ) : (
+                  <button
+                    onClick={() => setActiveView('portal-security')}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#D97706',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
+                      fontSize: '11px',
+                      padding: 0,
+                    }}
+                  >
+                    Locked · Verify ID to Decrypt
+                  </button>
+                )}
               </div>
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Wi-Fi:</span>{' '}

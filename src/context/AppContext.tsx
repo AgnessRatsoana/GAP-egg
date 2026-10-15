@@ -21,6 +21,7 @@ import {
   ComfortStatus,
   PropertyIssueStatus,
   GetToKnowMe,
+  VerificationData,
 } from '../types';
 import {
   initialBeneficiaries,

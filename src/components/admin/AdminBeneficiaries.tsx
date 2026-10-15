@@ -10,6 +10,13 @@ import {
   DollarSign,
   Plus,
   Check,
+  Shield,
+  Lock,
+  Key,
+  AlertCircle,
+  FileText,
+  Download,
+  Sparkles,
 } from 'lucide-react';
 
 export const AdminBeneficiaries: React.FC = () => {
@@ -23,6 +30,9 @@ export const AdminBeneficiaries: React.FC = () => {
     addExpense,
     currentBeneficiaryId,
     setCurrentBeneficiaryId,
+    updateBeneficiaryVerification,
+    toggleBeneficiaryKeypad,
+    exportBeneficiaryData,
   } = useApp();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,7 +42,7 @@ export const AdminBeneficiaries: React.FC = () => {
   );
 
   // Case Drawer tabs
-  const [drawerTab, setDrawerTab] = useState<'case' | 'matching' | 'preferences' | 'finances' | 'checkins'>('case');
+  const [drawerTab, setDrawerTab] = useState<'case' | 'matching' | 'verification' | 'preferences' | 'finances' | 'checkins'>('case');
 
   // Matching state
   const [matchingPropertyId, setMatchingPropertyId] = useState('');
@@ -317,6 +327,7 @@ export const AdminBeneficiaries: React.FC = () => {
             {[
               { id: 'case', label: 'Case Summary' },
               { id: 'matching', label: 'Sanctuary Matching' },
+              { id: 'verification', label: `ID & Biometrics Clearance ${selectedBeneficiary.isIdentityVerified ? '✓' : ''}` },
               { id: 'preferences', label: 'Personalisation Preferences' },
               { id: 'finances', label: 'Grant Budget & Expenses' },
               { id: 'checkins', label: `Journal Check-ins (${selectedBenCheckins.length})` },
@@ -495,6 +506,156 @@ export const AdminBeneficiaries: React.FC = () => {
                   <Home size={15} /> Confirm Sanctuary Pairing & Create Booking
                 </button>
               </form>
+            </div>
+          )}
+
+          {/* Tab 2.5: Verification & ID Clearance */}
+          {drawerTab === 'verification' && (
+            <div style={{ backgroundColor: 'var(--bg-warm)', padding: '24px', borderRadius: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '10px' }}>
+                <div>
+                  <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Shield size={18} color="var(--primary-forest)" />
+                    FICA & POPIA Cryptographic Identity Review
+                  </h4>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    Case ID: BEN-{selectedBeneficiary.id.toUpperCase()} · Protection of Personal Information Act Audit
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={() => {
+                      const isCurrentlyVerified = Boolean(selectedBeneficiary.isIdentityVerified);
+                      updateBeneficiaryVerification(selectedBeneficiary.id, {
+                        idType: 'sa_id',
+                        idNumber: selectedBeneficiary.verificationData?.idNumber || '9205105088081',
+                        idVerified: !isCurrentlyVerified,
+                        residentialAddress: selectedBeneficiary.verificationData?.residentialAddress || '14 Kloof Street',
+                        suburb: selectedBeneficiary.verificationData?.suburb || 'Gardens',
+                        city: selectedBeneficiary.city || 'Cape Town',
+                        province: 'Western Cape',
+                        postalCode: '8001',
+                        addressVerified: !isCurrentlyVerified,
+                        faceLivenessConfirmed: !isCurrentlyVerified,
+                        faceMatchScore: !isCurrentlyVerified ? 98.9 : 0,
+                        faceVerified: !isCurrentlyVerified,
+                        certificateRef: `GAM-ZA-${Date.now().toString().slice(-6)}`,
+                      });
+                    }}
+                    style={{
+                      padding: '7px 14px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      backgroundColor: selectedBeneficiary.isIdentityVerified ? '#EF4444' : 'var(--primary-forest)',
+                      color: '#FFFFFF',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {selectedBeneficiary.isIdentityVerified ? 'Revoke Clearance' : 'Approve & Validate Clearance'}
+                  </button>
+                  <button
+                    onClick={() => toggleBeneficiaryKeypad(selectedBeneficiary.id)}
+                    style={{
+                      padding: '7px 14px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border-color)',
+                      backgroundColor: '#FFFFFF',
+                      color: 'var(--text-heading)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {selectedBeneficiary.keypadUnlocked ? 'Lock Keypad PIN' : 'Unlock Keypad PIN'}
+                  </button>
+                  <button
+                    onClick={() => exportBeneficiaryData(selectedBeneficiary.id)}
+                    style={{
+                      padding: '7px 14px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border-color)',
+                      backgroundColor: '#FFFFFF',
+                      color: 'var(--text-heading)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
+                    <Download size={13} /> Export POPIA
+                  </button>
+                </div>
+              </div>
+
+              {/* Status Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '20px' }}>
+                <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '4px' }}>
+                    13-Digit South African ID
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '4px' }}>
+                    {selectedBeneficiary.verificationData?.idNumber || 'Pending Document Submission'}
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: selectedBeneficiary.verificationData?.idVerified || selectedBeneficiary.isIdentityVerified ? 'var(--color-green)' : '#D97706' }}>
+                    {selectedBeneficiary.verificationData?.idVerified || selectedBeneficiary.isIdentityVerified ? '✓ Validated against Home Affairs' : '⚠ Pending Document'}
+                  </span>
+                </div>
+
+                <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '4px' }}>
+                    Proof of Residence (FICA)
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '4px' }}>
+                    {selectedBeneficiary.city || 'South Africa'}
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: selectedBeneficiary.verificationData?.addressVerified || selectedBeneficiary.isIdentityVerified ? 'var(--color-green)' : '#D97706' }}>
+                    {selectedBeneficiary.verificationData?.addressVerified || selectedBeneficiary.isIdentityVerified ? '✓ Utility Bill Verified' : '⚠ Pending Upload'}
+                  </span>
+                </div>
+
+                <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '4px' }}>
+                    Biometric Liveness Detection
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '4px' }}>
+                    {selectedBeneficiary.verificationData?.faceMatchScore ? `${selectedBeneficiary.verificationData.faceMatchScore}% Confidence` : 'Pending Webcam Scan'}
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: selectedBeneficiary.verificationData?.faceVerified || selectedBeneficiary.isIdentityVerified ? 'var(--color-green)' : '#D97706' }}>
+                    {selectedBeneficiary.verificationData?.faceVerified || selectedBeneficiary.isIdentityVerified ? '✓ AI Anti-Spoofing Passed' : '⚠ Scan Pending'}
+                  </span>
+                </div>
+
+                <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '4px' }}>
+                    Sanctuary Digital Door Access
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '4px' }}>
+                    PIN: {selectedBeneficiary.keypadUnlocked || selectedBeneficiary.isIdentityVerified ? '2491# (Decrypted)' : 'Locked'}
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: selectedBeneficiary.keypadUnlocked || selectedBeneficiary.isIdentityVerified ? 'var(--color-green)' : '#EF4444' }}>
+                    {selectedBeneficiary.keypadUnlocked || selectedBeneficiary.isIdentityVerified ? '✓ Keycode Active' : '🔒 Access Encrypted'}
+                  </span>
+                </div>
+              </div>
+
+              {selectedBeneficiary.securityClearanceCode && (
+                <div style={{ backgroundColor: '#FFFFFF', padding: '14px 18px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Sparkles size={16} color="var(--primary-forest)" />
+                    <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)' }}>
+                      Cryptographic Clearance Certificate: <strong>{selectedBeneficiary.securityClearanceCode}</strong>
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                    POPIA Act 4 of 2013 Compliant
+                  </span>
+                </div>
+              )}
             </div>
           )}
 

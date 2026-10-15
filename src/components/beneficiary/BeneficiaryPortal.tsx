@@ -158,6 +158,7 @@ export const BeneficiaryPortal: React.FC = () => {
       {/* Render Active Sub-View */}
       <div className="animate-fade-in">
         {activeView === 'portal-dashboard' && <BeneficiaryDashboard />}
+        {(activeView === 'portal-security' || activeView === 'portal-verification') && <BeneficiarySecurityView />}
         {activeView === 'portal-checkin' && <WellbeingCheckinView />}
         {activeView === 'portal-comfort' && <ComfortRequestsView />}
         {activeView === 'portal-support' && <MySupportView />}
