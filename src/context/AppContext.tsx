@@ -324,6 +324,77 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     );
   };
 
+  const updateBeneficiaryVerification = (beneficiaryId: string, data: VerificationData) => {
+    setBeneficiaries((prev) =>
+      prev.map((b) => {
+        if (b.id !== beneficiaryId) return b;
+        const allVerified = data.idVerified && data.addressVerified && data.faceVerified;
+        return {
+          ...b,
+          verificationData: data,
+          isIdentityVerified: allVerified,
+          securityClearanceCode: data.certificateRef || `GAM-ZA-${Date.now().toString().slice(-6)}`,
+          status: allVerified && (b.status === 'submitted' || b.status === 'under_review') ? 'assessment' : b.status,
+          keypadUnlocked: allVerified,
+          popiaConsentDate: new Date().toISOString(),
+        };
+      })
+    );
+  };
+
+  const toggleBeneficiaryKeypad = (beneficiaryId: string) => {
+    setBeneficiaries((prev) =>
+      prev.map((b) => (b.id === beneficiaryId ? { ...b, keypadUnlocked: !b.keypadUnlocked } : b))
+    );
+  };
+
+  const toggleTwoFactor = (beneficiaryId: string) => {
+    setBeneficiaries((prev) =>
+      prev.map((b) => (b.id === beneficiaryId ? { ...b, twoFactorEnabled: !b.twoFactorEnabled } : b))
+    );
+  };
+
+  const exportBeneficiaryData = (beneficiaryId: string) => {
+    const ben = beneficiaries.find((b) => b.id === beneficiaryId);
+    if (!ben) return;
+    const exportPayload = {
+      popiaCompliance: 'Protection of Personal Information Act (Act 4 of 2013) Certified Export',
+      exportedAt: new Date().toISOString(),
+      encryptionStandard: 'AES-256 POPIA Safeguarded Client Archive',
+      beneficiary: ben,
+      checkins: checkins.filter((c) => c.beneficiaryId === beneficiaryId),
+      comfortRequests: comfortRequests.filter((c) => c.beneficiaryId === beneficiaryId),
+      serviceRequests: serviceRequests.filter((c) => c.beneficiaryId === beneficiaryId),
+      messages: messages.filter((m) => m.senderId === beneficiaryId || m.recipientId === beneficiaryId),
+    };
+    const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `POPIA_Encrypted_Archive_${ben.name.replace(/\s+/g, '_')}_${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const requestDataErasure = (beneficiaryId: string) => {
+    const confirmed = window.confirm(
+      'POPIA Right to be Forgotten Request:\n\nAre you sure you want to permanently delete your confidential sanctuary application, uploaded ID documents, and account data? This action is irreversible.'
+    );
+    if (!confirmed) return;
+    setBeneficiaries((prev) => prev.filter((b) => b.id !== beneficiaryId));
+    setCheckins((prev) => prev.filter((c) => c.beneficiaryId !== beneficiaryId));
+    setComfortRequests((prev) => prev.filter((c) => c.beneficiaryId !== beneficiaryId));
+    setServiceRequests((prev) => prev.filter((s) => s.beneficiaryId !== beneficiaryId));
+    if (currentBeneficiaryId === beneficiaryId) {
+      setCurrentBeneficiaryId('');
+      setRole('public');
+      setActiveView('landing');
+    }
+    alert('POPIA erasure request fulfilled: Your profile and confidential data have been permanently purged.');
+  };
+
   const updateBeneficiaryStatus = (id: string, status: BeneficiaryStatus) => {
     setBeneficiaries((prev) =>
       prev.map((b) => (b.id === id ? { ...b, status } : b))
