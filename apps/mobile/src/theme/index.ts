@@ -1,0 +1,45 @@
+export const colors = {
+  bgPage: '#F3F7FA',
+  bgCard: '#FFFFFF',
+  bgWater: '#EBF4F7',
+  bgWarm: '#FAF4EF',
+  borderColor: '#DEE9ED',
+  borderWater: '#C6E0E9',
+  borderStoneGold: '#D8CBB8',
+  water: '#367A8F',
+  waterDeep: '#22596B',
+  green: '#3D6F56',
+  greenDark: '#2B5440',
+  greenLight: '#EFF7F2',
+  greenBorder: '#C8E2D2',
+  brown: '#C27450',
+  brownLight: '#FAF1EB',
+  brownBorder: '#ECCDBE',
+  sand: '#B8855A',
+  heading: '#1E2827',
+  main: '#283533',
+  body: '#485654',
+  muted: '#6E7E7C',
+  subtle: '#96A6A4',
+  footer: '#1E2C23',
+};
+
+export const fonts = {
+  serif: 'CormorantGaramond_400Regular',
+  serifLight: 'CormorantGaramond_300Light',
+  serifItalic: 'CormorantGaramond_400Regular_Italic',
+  serifMedium: 'CormorantGaramond_500Medium',
+  serifSemi: 'CormorantGaramond_600SemiBold',
+  sans: 'Inter_400Regular',
+  sansMedium: 'Inter_500Medium',
+  sansSemi: 'Inter_600SemiBold',
+  sansBold: 'Inter_700Bold',
+};
+
+export const shadowCard = {
+  shadowColor: '#22596B',
+  shadowOpacity: 0.08,
+  shadowRadius: 14,
+  shadowOffset: { width: 0, height: 4 },
+  elevation: 2,
+};

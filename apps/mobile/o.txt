@@ -1,0 +1,12 @@
+Starting project at C:\Users\PC\Gap-Month\Gap-A-Month\apps\mobile
+Expo Autolinking module resolution enabled
+[31m[7m[1m ERROR [22m[27m[39m An unexpected error occurred while installing the latest version of React Native DevTools. Using a fallback version instead. Details:
+
+
+Metro is running in CI mode, reloads are disabled. Remove CI=true to enable watch mode.
+Starting Metro Bundler
+
+Waiting on http://localhost:8099
+
+Logs for your project will appear below.
+Android Bundled 101059ms node_modules\expo-router\entry.js (1682 modules)

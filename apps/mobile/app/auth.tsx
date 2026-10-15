@@ -1,22 +1,24 @@
-import { Link } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Text, View } from 'react-native';
+import { Screen } from '../src/components/Chrome';
+import { Body, Button, Card, Eyebrow, SerifTitle } from '../src/components/ui';
+import { colors, fonts } from '../src/theme';
 
 export default function AuthScreen() {
+  const router = useRouter();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome back</Text>
-      <Text style={styles.body}>
-        Authentication is not connected yet. This screen is a deliberately honest foundation
-        for the future secure sign-in flow.
-      </Text>
-      <Link href="/dashboard" style={styles.link}>View beneficiary foundation</Link>
-    </View>
+    <Screen footer={false}>
+      <View style={{ padding: 20, paddingTop: 44 }}>
+        <Eyebrow style={{ marginBottom: 14 }}>Welcome back</Eyebrow>
+        <SerifTitle size={32} style={{ marginBottom: 14 }}>Sign In</SerifTitle>
+        <Body style={{ textAlign: 'center', marginBottom: 28 }}>
+          Secure sign-in is not connected yet. You can preview the beneficiary portal below.
+        </Body>
+        <Card style={{ padding: 24, gap: 14 }}>
+          <Text style={{ fontFamily: fonts.serifMedium, fontSize: 22, color: colors.heading }}>Your sanctuary portal</Text>
+          <Button label="Preview Portal" icon="arrow-forward" onPress={() => router.navigate('/portal')} />
+        </Card>
+      </View>
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 32, backgroundColor: '#F3F7FA' },
-  title: { color: '#244B57', fontSize: 32, fontWeight: '600' },
-  body: { color: '#526B72', fontSize: 17, lineHeight: 26, marginTop: 16 },
-  link: { color: '#367A8F', fontWeight: '700', marginTop: 28 },
-});
