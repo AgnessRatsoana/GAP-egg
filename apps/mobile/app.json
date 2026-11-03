@@ -11,7 +11,8 @@
       "expo-font",
       "expo-splash-screen",
       "expo-status-bar",
-      "expo-image"
+      "expo-image",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true

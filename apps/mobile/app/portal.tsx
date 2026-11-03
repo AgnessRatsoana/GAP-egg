@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Screen } from '../src/components/Chrome';
 import { Body, Button, Card, Eyebrow } from '../src/components/ui';
@@ -14,12 +14,19 @@ const tabs = [
   { id: 'support', label: 'Support Sessions', icon: 'heart-outline' },
   { id: 'know-me', label: 'Stay Preferences', icon: 'sparkles-outline' },
   { id: 'messages', label: 'Private Messages', icon: 'chatbubble-outline' },
+  { id: 'notifications', label: 'Notifications', icon: 'notifications-outline' },
 ] as const;
 
 export default function PortalScreen() {
   const router = useRouter();
-  const [active, setActive] = useState<(typeof tabs)[number]['id']>('home');
+  const params = useLocalSearchParams<{ section?: string }>();
+  const getInitialSection = () => tabs.find((tab) => tab.id === params.section)?.id ?? 'home';
+  const [active, setActive] = useState<(typeof tabs)[number]['id']>(getInitialSection);
   const current = tabs.find((t) => t.id === active)!;
+
+  useEffect(() => {
+    setActive(getInitialSection());
+  }, [params.section]);
 
   return (
     <Screen>

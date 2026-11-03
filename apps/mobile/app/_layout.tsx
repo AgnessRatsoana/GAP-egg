@@ -12,6 +12,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+
+import { GlobalSideMenu } from '../src/components/GlobalSideMenu';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,7 +40,10 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />
+      <View style={{ flex: 1 }}>
+        <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />
+        <GlobalSideMenu />
+      </View>
     </SafeAreaProvider>
   );
 }
