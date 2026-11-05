@@ -83,7 +83,7 @@ export default function SupportScreen() {
                   <Text numberOfLines={1} style={styles.professionalName}>{professional.name}</Text>
                   <Text numberOfLines={1} style={styles.specialty}>{professional.specialty}</Text>
                   <View style={styles.ratingRow}>
-                    <Ionicons name="star" size={13} color="#D7A844" />
+                    <Ionicons name="star" size={13} color={colors.accent} />
                     <Text style={styles.rating}>{professional.rating.toFixed(2)}</Text>
                     <Text style={styles.sessionCount}>· {professional.completedSessions} sessions</Text>
                   </View>

@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import MapView, { Marker } from 'react-native-maps';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { initialProperties } from '../../src/data/mockData';
@@ -57,6 +57,17 @@ export default function PropertyDetailScreen() {
     Linking.openURL(url);
   };
 
+  const shareProperty = async () => {
+    try {
+      await Share.share({
+        title: property.title,
+        message: `${property.title}\n${property.city}\n\n${property.description}`,
+      });
+    } catch {
+      // The platform share sheet can be dismissed without completing a share.
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -79,17 +90,27 @@ export default function PropertyDetailScreen() {
           <Image source={getSanctuaryImage(property.id)} style={styles.heroImage} contentFit="cover" />
 
           <View style={styles.contentWrap}>
-            <Text style={styles.type}>{property.propertyType}</Text>
+            <View style={styles.typeRow}>
+              <Text style={styles.type}>{property.propertyType}</Text>
+              <Pressable
+                style={styles.shareButton}
+                accessibilityRole="button"
+                accessibilityLabel={`Share ${property.title}`}
+                onPress={shareProperty}
+              >
+                <Ionicons name="share-social-outline" size={19} color={colors.accent} />
+              </Pressable>
+            </View>
             <Text style={styles.title}>{property.title}</Text>
 
             <View style={styles.topMetaRow}>
               <View style={styles.ratingPill}>
-                <Ionicons name="star" size={14} color="#F4C95D" />
+                <Ionicons name="star" size={14} color={colors.accent} />
                 <Text style={styles.ratingText}>{property.rating ?? 4.9}</Text>
               </View>
 
               <Pressable onPress={() => setActiveTab('reviews')}>
-                <Text style={styles.linkText}>({property.reviewCount ?? 128} reviews)</Text>
+                <Text style={styles.reviewCountText}>({property.reviewCount ?? 128} reviews)</Text>
               </Pressable>
             </View>
 
@@ -211,7 +232,7 @@ export default function PropertyDetailScreen() {
               <View style={styles.reviewList}>
                 <View style={styles.reviewSummary}>
                   <View style={styles.reviewSummaryBadge}>
-                    <Ionicons name="star" size={18} color="#F4C95D" />
+                    <Ionicons name="star" size={18} color={colors.accent} />
                     <Text style={styles.reviewSummaryText}>{property.rating ?? 4.9}</Text>
                   </View>
                   <Text style={styles.reviewSummaryLabel}>{property.reviewCount ?? 128} guest reviews</Text>
@@ -230,7 +251,7 @@ export default function PropertyDetailScreen() {
                           key={`${review.id}-${index}`}
                           name={index < Math.round(review.rating) ? 'star' : 'star-outline'}
                           size={14}
-                          color="#F4C95D"
+                          color={colors.accent}
                         />
                       ))}
                     </View>
@@ -249,7 +270,12 @@ export default function PropertyDetailScreen() {
             <Text style={styles.priceValue}>R {property.nightlyPrice?.toLocaleString() ?? '1,850'}</Text>
           </View>
 
-          <Pressable style={styles.bookingButton} accessibilityRole="button">
+          <Pressable
+            style={styles.bookingButton}
+            accessibilityRole="button"
+            accessibilityLabel={`Book a stay at ${property.title}`}
+            onPress={() => router.push({ pathname: '/booking/[id]', params: { id: property.id } })}
+          >
             <Text style={styles.bookingButtonText}>Book now</Text>
           </Pressable>
         </View>
@@ -310,7 +336,21 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     textTransform: 'uppercase',
     color: colors.textSecondary,
+    marginBottom: 0,
+  },
+  typeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 8,
+  },
+  shareButton: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+    backgroundColor: colors.accentTint,
   },
   title: {
     fontFamily: fonts.sansBold,
@@ -342,6 +382,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.sansSemi,
     fontSize: 13,
     color: colors.secondaryGreen,
+  },
+  reviewCountText: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 13,
+    color: colors.accent,
   },
   locationRow: {
     flexDirection: 'row',

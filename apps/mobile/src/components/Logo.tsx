@@ -28,8 +28,8 @@ export function Logo({
             <Stop offset="1" stopColor="#22596B" />
           </LinearGradient>
           <LinearGradient id="sunGrad" x1="16" y1="12" x2="32" y2="28" gradientUnits="userSpaceOnUse">
-            <Stop offset="0" stopColor="#E5A872" />
-            <Stop offset="1" stopColor="#C27450" />
+            <Stop offset="0" stopColor={colors.accentLight} />
+            <Stop offset="1" stopColor={colors.accent} />
           </LinearGradient>
           <LinearGradient id="sageGrad" x1="20" y1="20" x2="34" y2="34" gradientUnits="userSpaceOnUse">
             <Stop offset="0" stopColor="#4E8468" />

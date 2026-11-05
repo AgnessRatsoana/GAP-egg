@@ -92,7 +92,7 @@ export default function AuthScreen() {
             keyboardShouldPersistTaps="handled"
           >
             <Pressable
-              onPress={() => router.replace('/')}
+              onPress={() => router.replace('/welcome')}
               style={styles.backButton}
             >
               <Text style={styles.backText}>← Back to welcome</Text>

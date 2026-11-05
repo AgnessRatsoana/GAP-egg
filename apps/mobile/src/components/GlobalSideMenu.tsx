@@ -1,24 +1,49 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { useState } from 'react';
+import { Image } from 'expo-image';
+import { router, usePathname } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { ImageBackground, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { loadProfileSettings, ProfileSettings, defaultProfileSettings } from '../data/profileSettings';
 import { colors, fonts } from '../theme';
 
 const currentUserName = 'Aaliyah';
 
 const menuItems = [
+  { label: 'Emergency care line', icon: 'warning-outline' as const, route: 'emergency' },
   { label: 'My Gap Month', icon: 'document-text-outline' as const, route: 'my-gap-month' },
   { label: 'Messages', icon: 'chatbubble-ellipses-outline' as const, route: 'Messages' },
   { label: 'Notifications', icon: 'notifications-outline' as const, route: 'Notifications' },
-  { label: 'Profile & Settings', icon: 'person-circle-outline' as const, route: 'Profile & Settings' },
+  { label: 'Profile & Settings', icon: 'person-circle-outline' as const, route: 'profile-settings' },
   { label: 'Support', icon: 'help-buoy-outline' as const, route: 'support' },
-  { label: 'Get to Know Me', icon: 'heart-outline' as const, route: 'Get to Know Me' },
+  { label: 'Get to Know Me', icon: 'heart-outline' as const, route: 'get-to-know-me' },
 ];
 
 export function GlobalSideMenu() {
+  const pathname = usePathname();
+  const isPublicEntryScreen = pathname === '/welcome' || pathname === '/auth';
   const [isOpen, setIsOpen] = useState(false);
+  const [profile, setProfile] = useState<ProfileSettings>(defaultProfileSettings);
+
+  useEffect(() => {
+    if (isPublicEntryScreen) setIsOpen(false);
+  }, [isPublicEntryScreen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let isMounted = true;
+    loadProfileSettings()
+      .then((settings) => {
+        if (isMounted) setProfile(settings);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isOpen]);
 
   const closeMenu = () => setIsOpen(false);
 
@@ -28,14 +53,25 @@ export function GlobalSideMenu() {
       router.push('/my-gap-month');
     } else if (destination === 'support') {
       router.push('/support');
+    } else if (destination === 'emergency') {
+      router.push('/emergency');
+    } else if (destination === 'get-to-know-me') {
+      router.push('/get-to-know-me');
+    } else if (destination === 'profile-settings') {
+      router.push('/profile-settings');
     } else {
       router.push({ pathname: '/coming-soon', params: { section: destination } });
     }
   };
 
+  const logOut = () => {
+    closeMenu();
+    router.replace('/welcome');
+  };
+
   return (
     <>
-      {!isOpen && (
+      {!isOpen && !isPublicEntryScreen && (
         <Pressable
           style={styles.edgeToggle}
           accessibilityRole="button"
@@ -47,7 +83,7 @@ export function GlobalSideMenu() {
         </Pressable>
       )}
 
-      <Modal visible={isOpen} transparent animationType="fade" onRequestClose={closeMenu}>
+      <Modal visible={isOpen && !isPublicEntryScreen} transparent animationType="fade" onRequestClose={closeMenu}>
         <View style={styles.modalRoot}>
           <Pressable
             style={StyleSheet.absoluteFill}
@@ -72,30 +108,53 @@ export function GlobalSideMenu() {
                         {menuItems.map((item) => (
                           <Pressable
                             key={item.route}
-                            style={styles.menuItem}
+                              style={[styles.menuItem, item.route === 'emergency' && styles.emergencyMenuItem]}
                             accessibilityRole="button"
                             onPress={() => openDestination(item.route)}
                           >
-                            <Ionicons name={item.icon} size={21} color={colors.primaryDark} />
-                            <Text style={styles.menuItemText}>{item.label}</Text>
+                              <Ionicons
+                                name={item.icon}
+                                size={21}
+                                color={item.route === 'emergency' ? '#9B1C1C' : colors.primaryDark}
+                              />
+                              <Text style={[styles.menuItemText, item.route === 'emergency' && styles.emergencyMenuItemText]}>
+                                {item.label}
+                              </Text>
                           </Pressable>
                         ))}
                       </ScrollView>
                     </View>
 
-                    <Pressable
-                      style={styles.profileRow}
-                      accessibilityRole="button"
-                      onPress={() => openDestination('Profile & Settings')}
-                    >
-                      <View style={styles.profileAvatar}>
-                        <Text style={styles.profileInitial}>{currentUserName.charAt(0)}</Text>
-                      </View>
-                      <View style={styles.profileCopy}>
-                        <Text style={styles.profileName}>{currentUserName}</Text>
-                        <Text style={styles.profileLabel}>Profile & Settings</Text>
-                      </View>
-                    </Pressable>
+                    <View style={styles.accountActions}>
+                      <Pressable
+                        style={styles.profileRow}
+                        accessibilityRole="button"
+                        accessibilityLabel="Open Profile & Settings"
+                        onPress={() => openDestination('profile-settings')}
+                      >
+                        <View style={styles.profileAvatar}>
+                          {profile.photoUri ? (
+                            <Image source={{ uri: profile.photoUri }} style={styles.profileAvatarImage} contentFit="cover" />
+                          ) : (
+                            <Text style={styles.profileInitial}>{(profile.name || currentUserName).charAt(0).toUpperCase()}</Text>
+                          )}
+                        </View>
+                        <View style={styles.profileCopy}>
+                          <Text style={styles.profileName}>{profile.name || currentUserName}</Text>
+                          <Text style={styles.profileLabel}>Logged in</Text>
+                        </View>
+                      </Pressable>
+
+                      <Pressable
+                        style={styles.logoutButton}
+                        accessibilityRole="button"
+                        accessibilityLabel="Log out and return to welcome"
+                        onPress={logOut}
+                      >
+                        <Ionicons name="log-out-outline" size={19} color="#8F1D2C" />
+                        <Text style={styles.logoutText}>Log out</Text>
+                      </Pressable>
+                    </View>
                   </View>
                 </SafeAreaView>
               </View>
@@ -172,6 +231,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
+  accountActions: {
+    gap: 10,
+    marginBottom: 10,
+  },
   menuTop: {
     flexShrink: 1,
   },
@@ -191,6 +254,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 14,
   },
+  emergencyMenuItem: {
+    paddingHorizontal: 10,
+    marginBottom: 6,
+    borderRadius: 12,
+    backgroundColor: '#FCE8E7',
+  },
+  emergencyMenuItemText: {
+    color: '#9B1C1C',
+  },
   menuItemText: {
     flex: 1,
     fontFamily: fonts.sansSemi,
@@ -203,8 +275,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     paddingHorizontal: 12,
-    marginBottom: 10,
     borderRadius: 16,
+    borderWidth: 2,
+    borderColor: 'rgba(21, 91, 70, 0.2)',
     backgroundColor: 'rgba(255,255,255,0.84)',
   },
   profileAvatar: {
@@ -214,6 +287,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 23,
     backgroundColor: colors.sage,
+    overflow: 'hidden',
+  },
+  profileAvatarImage: {
+    width: '100%',
+    height: '100%',
   },
   profileInitial: {
     fontFamily: fonts.sansBold,
@@ -233,5 +311,21 @@ const styles = StyleSheet.create({
     fontFamily: fonts.sans,
     fontSize: 12,
     color: colors.secondaryGreen,
+  },
+  logoutButton: {
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 9,
+    borderRadius: 14,
+    backgroundColor: '#FCE8E7',
+    borderWidth: 1.5,
+    borderColor: '#8F1D2C',
+  },
+  logoutText: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 14,
+    color: '#8F1D2C',
   },
 });

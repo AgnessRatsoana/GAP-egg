@@ -64,7 +64,7 @@ export function PlaceCard({ property, isFavorite = false, onToggleFavorite }: Pl
 
         <View style={styles.metaRow}>
           <View style={styles.ratingWrap}>
-            <Ionicons name="star" size={14} color="#F4C95D" />
+            <Ionicons name="star" size={14} color={colors.accent} />
             <Text style={styles.ratingText}>{property.rating ?? 4.9}</Text>
           </View>
           <Text style={styles.reviewText}>({property.reviewCount ?? 128} reviews)</Text>

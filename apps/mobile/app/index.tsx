@@ -30,12 +30,20 @@ function getDisplayType(propertyType: string) {
   }
 }
 
+function getLocalDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export default function WelcomeHomeScreen() {
   const [selectedProvince, setSelectedProvince] = useState('Gauteng');
   const [selectedType, setSelectedType] = useState('All');
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [isProvinceOpen, setIsProvinceOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [emergencyTriageOnly, setEmergencyTriageOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const videoPlayer = useVideoPlayer(require('../../../media/carousel.mp4'), (player) => {
     player.loop = true;
@@ -50,10 +58,16 @@ export default function WelcomeHomeScreen() {
 
   const filteredPlaces = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
+    const today = getLocalDateKey(new Date());
 
     return initialProperties.filter((property) => {
       const provinceMatch = selectedProvince === 'Gauteng' ? true : property.province === selectedProvince;
       const typeMatch = selectedType === 'All' || getDisplayType(property.propertyType) === selectedType;
+      const availabilityMatch = !emergencyTriageOnly || (
+        property.verificationStatus === 'approved' &&
+        property.availabilityStart <= today &&
+        property.availabilityEnd >= today
+      );
       const matchesQuery =
         !normalizedQuery ||
         property.title.toLowerCase().includes(normalizedQuery) ||
@@ -62,9 +76,9 @@ export default function WelcomeHomeScreen() {
         property.address.toLowerCase().includes(normalizedQuery) ||
         property.description.toLowerCase().includes(normalizedQuery);
 
-      return provinceMatch && typeMatch && matchesQuery;
+      return provinceMatch && typeMatch && availabilityMatch && matchesQuery;
     });
-  }, [searchQuery, selectedProvince, selectedType]);
+  }, [emergencyTriageOnly, searchQuery, selectedProvince, selectedType]);
 
   const recommendedPlaces = useMemo(
     () => [...filteredPlaces].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 3),
@@ -72,9 +86,9 @@ export default function WelcomeHomeScreen() {
   );
 
   const nearbyPlaces = useMemo(() => {
-    const list = filteredPlaces.length > 0 ? filteredPlaces : initialProperties;
+    const list = filteredPlaces.length > 0 || emergencyTriageOnly ? filteredPlaces : initialProperties;
     return [...list].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 4);
-  }, [filteredPlaces]);
+  }, [emergencyTriageOnly, filteredPlaces]);
 
   const popularPlaces = useMemo(
     () => [...filteredPlaces].sort((a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0)).slice(0, 3),
@@ -198,7 +212,29 @@ export default function WelcomeHomeScreen() {
                 })}
               </View>
             )}
+
+            <Pressable
+              style={styles.emergencyTriageButton}
+              accessibilityRole="checkbox"
+              accessibilityLabel="Filter for sanctuaries available today"
+              accessibilityState={{ checked: emergencyTriageOnly }}
+              onPress={() => setEmergencyTriageOnly((selected) => !selected)}
+            >
+              <View style={styles.emergencyTriageCopy}>
+                <Text style={styles.emergencyTriageTitle}>Emergency Triage</Text>
+                <Text style={styles.emergencyTriageDescription}>Show only sanctuaries available today</Text>
+              </View>
+              <View style={[styles.emergencyCheckbox, emergencyTriageOnly && styles.emergencyCheckboxSelected]}>
+                {emergencyTriageOnly && <Ionicons name="checkmark" size={15} color="#FFFFFF" />}
+              </View>
+            </Pressable>
           </View>
+
+          {emergencyTriageOnly && (
+            <Text style={styles.emergencyTriageSelectedMessage}>
+              Available sanctuaries for urgent intake
+            </Text>
+          )}
 
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Nearby sanctuaries</Text>
@@ -217,7 +253,9 @@ export default function WelcomeHomeScreen() {
               ))
             ) : (
               <View style={styles.emptyState}>
-                <Text style={styles.emptyStateText}>No nearby sanctuaries found.</Text>
+                <Text style={styles.emptyStateText}>
+                  {emergencyTriageOnly ? 'No sanctuaries are available today.' : 'No nearby sanctuaries found.'}
+                </Text>
               </View>
             )}
           </ScrollView>
@@ -512,6 +550,53 @@ const styles = StyleSheet.create({
   filterTagTextSelected: {
     fontFamily: fonts.sansSemi,
     color: colors.primaryDark,
+  },
+  emergencyTriageButton: {
+    minHeight: 54,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 12,
+    marginTop: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.card,
+  },
+  emergencyTriageCopy: {
+    flex: 1,
+    gap: 3,
+  },
+  emergencyTriageTitle: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 13,
+    color: colors.accent,
+  },
+  emergencyTriageDescription: {
+    fontFamily: fonts.sans,
+    fontSize: 10,
+    lineHeight: 14,
+    color: colors.textSecondary,
+  },
+  emergencyCheckbox: {
+    width: 22,
+    height: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: colors.accent,
+    backgroundColor: colors.card,
+  },
+  emergencyCheckboxSelected: {
+    borderColor: colors.accent,
+    backgroundColor: colors.accent,
+  },
+  emergencyTriageSelectedMessage: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 15,
+    color: colors.accent,
+    marginBottom: 10,
   },
   sectionHeader: {
     flexDirection: 'row',

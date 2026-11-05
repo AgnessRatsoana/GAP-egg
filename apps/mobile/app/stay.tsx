@@ -1,7 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Animated, Easing, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useRef, useState } from 'react';
 
 import { BottomTabs } from '../src/components/BottomTabs';
 import { initialProperties } from '../src/data/mockData';
@@ -13,6 +14,27 @@ const minimumStayDays = 30;
 const daysStayed = 8;
 const daysRemaining = Math.max(minimumStayDays - daysStayed, 0);
 const currentStay = initialProperties.find((property) => property.id === 'prop-002') ?? initialProperties[1];
+
+type MoodIcon =
+  | { family: 'fontAwesome'; name: keyof typeof FontAwesome6.glyphMap }
+  | { family: 'material'; name: keyof typeof MaterialCommunityIcons.glyphMap };
+
+type MoodOption = {
+  id: number;
+  label: string;
+  backgroundColor: string;
+  foregroundColor: string;
+  icon: MoodIcon;
+};
+
+const moodOptions: MoodOption[] = [
+  { id: 1, label: 'Great', backgroundColor: '#286C55', foregroundColor: '#FFFFFF', icon: { family: 'fontAwesome', name: 'face-smile-beam' } },
+  { id: 2, label: 'Good', backgroundColor: '#E5EBDD', foregroundColor: '#155B46', icon: { family: 'fontAwesome', name: 'face-smile-beam' } },
+  { id: 3, label: 'Okay', backgroundColor: '#F3B54A', foregroundColor: '#553A0C', icon: { family: 'material', name: 'emoticon-neutral-outline' } },
+  { id: 4, label: 'Not good', backgroundColor: '#F6D6D3', foregroundColor: '#8D3936', icon: { family: 'material', name: 'emoticon-sad-outline' } },
+  { id: 5, label: 'Bad', backgroundColor: '#C96863', foregroundColor: '#FFFFFF', icon: { family: 'material', name: 'emoticon-sad-outline' } },
+  { id: 6, label: 'I need support', backgroundColor: '#8F1D2C', foregroundColor: '#FFFFFF', icon: { family: 'material', name: 'alert-outline' } },
+];
 
 const activityItems = [
   { count: '2', label: 'Upcoming appointments', icon: 'calendar-outline' as const },
@@ -55,6 +77,41 @@ function getTimeGreeting() {
 }
 
 export default function MyStayScreen() {
+  const pulse = useRef(new Animated.Value(0)).current;
+  const [isCheckinOpen, setIsCheckinOpen] = useState(false);
+  const [selectedMood, setSelectedMood] = useState<number | null>(null);
+  const [checkinNote, setCheckinNote] = useState('');
+  const [wantsSupportCall, setWantsSupportCall] = useState(false);
+  const [isCheckinSubmitted, setIsCheckinSubmitted] = useState(false);
+
+  useEffect(() => {
+    const heartbeat = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, { toValue: 0.55, duration: 520, easing: Easing.inOut(Easing.sin), useNativeDriver: false }),
+        Animated.timing(pulse, { toValue: 0, duration: 720, easing: Easing.inOut(Easing.sin), useNativeDriver: false }),
+        Animated.delay(120),
+        Animated.timing(pulse, { toValue: 0.34, duration: 480, easing: Easing.inOut(Easing.sin), useNativeDriver: false }),
+        Animated.timing(pulse, { toValue: 0, duration: 760, easing: Easing.inOut(Easing.sin), useNativeDriver: false }),
+        Animated.delay(950),
+      ])
+    );
+
+    heartbeat.start();
+    return () => heartbeat.stop();
+  }, [pulse]);
+
+  const checkinPulseStyle = {
+    borderColor: pulse.interpolate({ inputRange: [0, 1], outputRange: [colors.border, '#A7C9A8'] }),
+    borderWidth: pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 1.7] }),
+    shadowOpacity: pulse.interpolate({ inputRange: [0, 1], outputRange: [0.04, 0.2] }),
+    shadowRadius: pulse.interpolate({ inputRange: [0, 1], outputRange: [2, 7] }),
+  };
+
+  const closeCheckin = () => {
+    setIsCheckinOpen(false);
+    setIsCheckinSubmitted(false);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.page}>
@@ -139,6 +196,29 @@ export default function MyStayScreen() {
             </View>
           </View>
 
+          <Animated.View style={[styles.checkinSection, checkinPulseStyle]}>
+            <View style={styles.checkinIntro}>
+              <View style={styles.checkinIntroIcon}>
+                <Ionicons name="heart-outline" size={20} color={colors.primaryDark} />
+              </View>
+              <View style={styles.checkinIntroCopy}>
+                <Text style={styles.sectionTitle}>Wellbeing check-in</Text>
+                <Text style={styles.checkinDescription}>Take a moment to let us know how you&apos;re feeling.</Text>
+              </View>
+            </View>
+            <Pressable
+              style={styles.checkinButton}
+              accessibilityRole="button"
+              onPress={() => {
+                setIsCheckinSubmitted(false);
+                setIsCheckinOpen(true);
+              }}
+            >
+              <Text style={styles.checkinButtonText}>Start check-in</Text>
+              <Ionicons name="arrow-forward" size={17} color="#FFFFFF" />
+            </Pressable>
+          </Animated.View>
+
           <View style={styles.historySection}>
             <Text style={styles.sectionTitle}>Activity at this sanctuary</Text>
             <View style={styles.historyList}>
@@ -167,6 +247,115 @@ export default function MyStayScreen() {
         <View style={styles.navWrapper}>
           <BottomTabs activeTab="stay" />
         </View>
+
+        <Modal
+          visible={isCheckinOpen}
+          animationType="slide"
+          presentationStyle="fullScreen"
+          onRequestClose={closeCheckin}
+        >
+          <SafeAreaView style={styles.modalSafeArea}>
+            <View style={styles.modalHeader}>
+              <Pressable
+                style={styles.modalBackButton}
+                accessibilityRole="button"
+                accessibilityLabel="Close wellbeing check-in"
+                onPress={closeCheckin}
+              >
+                <Ionicons name="chevron-back" size={21} color={colors.primaryDark} />
+              </Pressable>
+              <Text style={styles.modalHeaderTitle}>Wellbeing check-in</Text>
+              <View style={styles.modalHeaderSpacer} />
+            </View>
+
+            {isCheckinSubmitted ? (
+              <View style={styles.submittedView}>
+                <View style={styles.submittedIcon}>
+                  <Ionicons name="checkmark" size={30} color={colors.primaryDark} />
+                </View>
+                <Text style={styles.submittedTitle}>Check-in complete</Text>
+                <Text style={styles.submittedDescription}>
+                  Thanks for sharing. Your check-in{wantsSupportCall ? ' and call request' : ''} has been recorded in this demo.
+                </Text>
+                <Pressable style={[styles.submitButton, styles.doneButton]} accessibilityRole="button" onPress={closeCheckin}>
+                  <Text style={[styles.submitButtonText, styles.doneButtonText]}>Done</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <ScrollView
+                style={styles.modalScroll}
+                contentContainerStyle={styles.modalContent}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+              >
+                <Text style={styles.modalQuestion}>How are you feeling today?</Text>
+                <View style={styles.moodGrid}>
+                  {moodOptions.map((mood) => {
+                    const isSelected = selectedMood === mood.id;
+                    return (
+                      <Pressable
+                        key={mood.id}
+                        style={[
+                          styles.moodOption,
+                          { backgroundColor: mood.backgroundColor },
+                          isSelected && styles.moodOptionSelected,
+                        ]}
+                        accessibilityRole="button"
+                        accessibilityLabel={mood.label}
+                        accessibilityState={{ selected: isSelected }}
+                        onPress={() => setSelectedMood(mood.id)}
+                      >
+                        {mood.icon.family === 'fontAwesome' ? (
+                          <FontAwesome6 name={mood.icon.name} size={30} color={mood.foregroundColor} />
+                        ) : (
+                          <MaterialCommunityIcons name={mood.icon.name} size={31} color={mood.foregroundColor} />
+                        )}
+                        <Text style={[styles.moodLabel, { color: mood.foregroundColor }]}>{mood.label}</Text>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+
+                <Text style={styles.inputHeading}>Anything you&apos;d like to share?</Text>
+                <TextInput
+                  value={checkinNote}
+                  onChangeText={setCheckinNote}
+                  placeholder="Add a note (optional)"
+                  placeholderTextColor={colors.textSecondary}
+                  style={styles.checkinInput}
+                  multiline
+                  textAlignVertical="top"
+                  accessibilityLabel="Optional wellbeing check-in note"
+                />
+
+                <Pressable
+                  style={styles.callRequestRow}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: wantsSupportCall }}
+                  onPress={() => setWantsSupportCall((value) => !value)}
+                >
+                  <View style={[styles.checkbox, wantsSupportCall && styles.checkboxChecked]}>
+                    {wantsSupportCall && <Ionicons name="checkmark" size={15} color="#FFFFFF" />}
+                  </View>
+                  <FontAwesome6 name="phone" size={17} color={colors.primaryDark} />
+                  <Text style={styles.callRequestText}>Request a wellbeing check call from Gap Month Agency</Text>
+                </Pressable>
+
+                <Pressable
+                  style={[styles.submitButton, selectedMood === null && styles.submitButtonDisabled]}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: selectedMood === null }}
+                  onPress={() => {
+                    if (selectedMood !== null) setIsCheckinSubmitted(true);
+                  }}
+                >
+                  <Text style={styles.submitButtonText}>Submit check-in</Text>
+                  <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+                </Pressable>
+              </ScrollView>
+            )}
+          </SafeAreaView>
+        </Modal>
       </View>
     </SafeAreaView>
   );
@@ -393,6 +582,224 @@ const styles = StyleSheet.create({
     fontFamily: fonts.sans,
     fontSize: 12,
     color: colors.textSecondary,
+  },
+  checkinSection: {
+    padding: 16,
+    marginTop: 18,
+    borderRadius: 18,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  checkinIntro: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 14,
+  },
+  checkinIntroIcon: {
+    width: 42,
+    height: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 14,
+    backgroundColor: colors.sage,
+  },
+  checkinIntroCopy: {
+    flex: 1,
+    gap: 4,
+  },
+  checkinDescription: {
+    fontFamily: fonts.sans,
+    fontSize: 11,
+    lineHeight: 16,
+    color: colors.textSecondary,
+  },
+  checkinButton: {
+    minHeight: 46,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 9,
+    borderRadius: 14,
+    backgroundColor: colors.primaryDark,
+  },
+  checkinButtonText: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 13,
+    color: '#FFFFFF',
+  },
+  modalSafeArea: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  modalHeader: {
+    minHeight: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  modalBackButton: {
+    width: 38,
+    height: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 13,
+    backgroundColor: colors.sage,
+  },
+  modalHeaderTitle: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 15,
+    color: colors.text,
+  },
+  modalHeaderSpacer: {
+    width: 38,
+  },
+  modalScroll: {
+    flex: 1,
+  },
+  modalContent: {
+    padding: 20,
+    paddingBottom: 36,
+  },
+  modalQuestion: {
+    fontFamily: fonts.sansBold,
+    fontSize: 22,
+    color: colors.text,
+    marginBottom: 18,
+  },
+  moodGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: 10,
+    marginBottom: 24,
+  },
+  moodOption: {
+    width: '31.5%',
+    minHeight: 104,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 9,
+    paddingHorizontal: 5,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  moodOptionSelected: {
+    borderColor: colors.text,
+  },
+  moodLabel: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 11,
+    textAlign: 'center',
+  },
+  inputHeading: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 14,
+    color: colors.text,
+    marginBottom: 9,
+  },
+  checkinInput: {
+    minHeight: 104,
+    paddingHorizontal: 13,
+    paddingTop: 12,
+    marginBottom: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.card,
+    fontFamily: fonts.sans,
+    fontSize: 13,
+    color: colors.text,
+  },
+  callRequestRow: {
+    minHeight: 64,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 11,
+    paddingHorizontal: 12,
+    marginBottom: 18,
+    borderRadius: 14,
+    backgroundColor: colors.sage,
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: colors.primaryDark,
+    backgroundColor: colors.card,
+  },
+  checkboxChecked: {
+    backgroundColor: colors.primaryDark,
+  },
+  callRequestText: {
+    flex: 1,
+    fontFamily: fonts.sansMedium,
+    fontSize: 12,
+    lineHeight: 17,
+    color: colors.primaryDark,
+  },
+  submitButton: {
+    minHeight: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 9,
+    borderRadius: 15,
+    backgroundColor: colors.primaryDark,
+  },
+  submitButtonDisabled: {
+    opacity: 0.45,
+  },
+  submitButtonText: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 14,
+    color: '#FFFFFF',
+  },
+  submittedView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 28,
+  },
+  submittedIcon: {
+    width: 64,
+    height: 64,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 18,
+    borderRadius: 32,
+    backgroundColor: colors.sage,
+  },
+  submittedTitle: {
+    fontFamily: fonts.sansBold,
+    fontSize: 22,
+    color: colors.text,
+    marginBottom: 8,
+  },
+  submittedDescription: {
+    fontFamily: fonts.sans,
+    fontSize: 14,
+    lineHeight: 21,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: 22,
+  },
+  doneButton: {
+    width: '100%',
+    minHeight: 58,
+    alignSelf: 'stretch',
+    paddingHorizontal: 24,
+  },
+  doneButtonText: {
+    fontSize: 16,
   },
   historySection: {
     gap: 12,

@@ -55,7 +55,7 @@ export default function MyGapMonthScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.page}>
-        <View style={styles.header}>
+        <View style={styles.backRow}>
           <Pressable
             style={styles.backButton}
             accessibilityRole="button"
@@ -64,10 +64,11 @@ export default function MyGapMonthScreen() {
           >
             <Ionicons name="chevron-back" size={22} color={colors.primaryDark} />
           </Pressable>
-          <View style={styles.headerCopy}>
-            <Text style={styles.eyebrow}>YOUR APPLICATION</Text>
-            <Text style={styles.pageTitle}>My Gap Month</Text>
-          </View>
+        </View>
+
+        <View style={styles.titleBlock}>
+          <Text style={styles.eyebrow}>YOUR APPLICATION</Text>
+          <Text style={styles.pageTitle}>My Gap Month</Text>
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
@@ -202,11 +203,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
+  backRow: {
+    alignItems: 'flex-start',
     paddingTop: 10,
+  },
+  titleBlock: {
+    gap: 4,
+    paddingTop: 18,
     paddingBottom: 16,
   },
   backButton: {
@@ -218,9 +221,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.border,
-  },
-  headerCopy: {
-    gap: 2,
   },
   eyebrow: {
     fontFamily: fonts.sansSemi,
@@ -271,12 +271,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9,
     paddingVertical: 6,
     borderRadius: 999,
-    backgroundColor: colors.card,
+    backgroundColor: colors.accentTint,
   },
   statusPillText: {
     fontFamily: fonts.sansSemi,
     fontSize: 10,
-    color: colors.primaryDark,
+    color: colors.accent,
   },
   sectionHeading: {
     flexDirection: 'row',
@@ -463,9 +463,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sage,
   },
   updateIconCurrent: {
-    backgroundColor: colors.sage,
+    backgroundColor: colors.accentTint,
     borderWidth: 1,
-    borderColor: colors.primaryDark,
+    borderColor: colors.accent,
   },
   updateConnector: {
     position: 'absolute',

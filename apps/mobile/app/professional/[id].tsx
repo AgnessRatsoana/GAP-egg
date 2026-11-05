@@ -33,7 +33,7 @@ export default function ProfessionalProfileScreen() {
             <Text style={styles.name}>{professional.name}</Text>
             <Text style={styles.specialty}>{professional.specialty}</Text>
             <View style={styles.ratingRow}>
-              <Ionicons name="star" size={16} color="#D7A844" />
+              <Ionicons name="star" size={16} color={colors.accent} />
               <Text style={styles.rating}>{professional.rating.toFixed(2)}</Text>
               <Text style={styles.sessions}>· {professional.completedSessions} completed sessions</Text>
             </View>
